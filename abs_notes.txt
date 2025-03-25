@@ -1,0 +1,34 @@
+# On March 25, 2025, I had read 70% of ABS guide,
+# then I realized that I needed to read it again and take as many notes as possible.
+
+chapter 1 Introduction
+
+I think it is better to read it with the very first chapters of \`bash info\'.
+Keywords: Posix, Unix, Shell, Bash, Ksh
+
+Unix shell can interpreter command and execute it.
+It provides tons of system utilities and builtin functions for user interface.
+
+Shell, as in interactive mode and non-interactive mode:
+What tasks can I accomplish with an interactive shell?
+Type command from keyboard and execute them, get result.
+
+What tasks can I accomplish with an non-interactive shell?
+Combine system utilities and create powerful script to accomplish complex system tasks.
+
+1. System administrators often write scripts to automate common
+tasks. Give several instances where such scripts would be useful.
+
+(1) : Write startup scripts to autoload network configuration files, such as proxy...
+(2) : Execute scheduled tasks, such as archiving and cleaning log files. 
+(3) : System monitor, e.g. use top to get process statistics and record.
+
+2. Write a script that upon invocation shows the time and date,
+   lists all logged-in users, and gives the system uptime. The
+   script then saves this information to a logfile.
+
+#!/bin/bash
+exec >>~/dummy_logs
+date; w; uptime;
+echo; echo; echo;
+exit
