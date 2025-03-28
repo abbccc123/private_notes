@@ -123,4 +123,17 @@ eval "while() { echo 'while is a keyword so this will not output'; }; while" # a
 eval "@() { echo @ is not a keyword; }; @"
 Errrrr.... It seems function name restriction is looser than those for variable.
 
-this is only for test
+About I/O redirection
+一个比较细致的点:
+/dev/pts /dev/tty 是(字符)流设备
+/path/to/file 是普通文件
+流设备中的数据有即时性，写入缓冲区后可立刻供消费端读取(所以未重定向的管道可以流畅地
+串联若干指令，标准流默认都指向终端设备！一旦在管道中重定向到普通文件，之后的指令无法从
+标准流中读取数据。即使你把输入流指向文件)
+For example:
+
+tty | cat # /dev/pts/X, OK.
+tty >./out | cat  # Nothing, 'cause it write output to a file and pts stdin get nothing.
+tty >./out | cat <./out # Nothing
+tty >./out ; cat <./out # OK, but why?
+
