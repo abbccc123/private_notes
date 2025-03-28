@@ -28,7 +28,99 @@ tasks. Give several instances where such scripts would be useful.
    script then saves this information to a logfile.
 
 #!/bin/bash
-exec >>~/dummy_logs
+exec >>~/dummy_logs # 重定向 stdout, 以append模式写入 ~/dummy_logs, 之后的子进程都继承stdout
 date; w; uptime;
 echo; echo; echo;
 exit
+
+
+
+chapter 3
+
+character?
+literal meaning <-> meta meaning
+
+一个字符可能有多重意义，一个字符在未引用时可能被shell或其他工具赋予其它功能
+It is ok to use the literal meaning of a character by escaping or quoting.
+
+One command line is a string, metacharacter separate it to parts, and shell interprete it.
+
+Q: shell展开命令的顺序是什么？ THIS IS VERY IMPORTANT.
+一行指令里有variable susbtitution, parameter substitution, command substitution, process substitution时候，
+最终得到的字符串是以什么顺序展开的呢？
+
+Very useful yet interesting examples:
+eval 'echo `echo "$"{a..b}`'
+eval "echo `echo '$'{a..b}`"
+
+关于这个主题的gpt解答:
+`command substitution`这种方式会在启动subshell执行命令前先过滤掉backslash
+$(command substitution) 这种方式不会
+
+除此之外，$()允许嵌套且可读性好。
+
+我认为，如果command比较简单，比如用tty获取当前终端设备号，那么用``进行command substitution是合适的，如果
+command包含复杂的逻辑，比如parameter substitution或者pipe，那么就用$()
+
+还有 parameter/variable expansion 发生在command substitution之前,
+所以command substitution的结果中包含的$var 不会被展开
+
+算术展开(()) 在parameter/variable、command substitution 之后。
+所以，
+在(())结构中使用变量和命令替换 ok。
+
+非字面量的引号 \' \" removal 发生在最后。
+
+通过 $> set -x
+观察复杂指令的展开过程
+展开顺序 **非常重要**
+
+It seems that bash $' ... ' structure has the same function as escaped character...
+But it can even translate original character to unicode character.
+
+$' ... ' 结构有点像"echo -e" 转义, 但是它是展开时就完成转义
+用这个可以观察细节
+set -x; echo $'\n'
+set -x; echo -e '\n'
+
+set +x; # Done
+
+()structure without assignment starts a subshell, in normal case,
+the parent bash process cannot access the variable defined in it,
+however, we can use process substitution or redirect the output ( to a file ) to get values in it.
+
+Brace expansion will not occur in a quote!
+But when it appears in a quote within command substitution, it will happen.
+
+Compare:
+echo \|{a..z}\|
+echo \| {a..z} \|
+
+Q: 对一个字符串进行base64编码，最终结果可能出现几种字符?
+base64编码包括哪64个字符？剩下的那一个字符是什么？有什么用？
+
+base64编码的原理是什么
+The base64 encoded form uses printable ASCII chars to represent binary data
+
+About {} structure, from ABS guide:
+{ local a; a=233 }; echo $a # ok
+local a; a=233 # WRONG! Output an error message
+
+Also from ABS guide:
+输入输出重定向将对block 内的所有command生效, 如果一大块代码需要进行重定向，
+考虑{ ... } <> fd 结构
+
+difference between '[' and '[[' structure
+According to ABS guide, '[[' is more flexible, and...
+'[' is a shell builtin ( imagine a function )
+'[[' is a shell keyword.
+What\'s the difference between builtin and a keyword?
+This example illustrate the difference:
+eval "[() { echo hello; }; [" # hello
+eval "[[() { echo hello; }; [[" # Output error message.
+eval "for() { echo 'for is a keyword so this will not output'; }; for" # as mentioned above
+eval "while() { echo 'while is a keyword so this will not output'; }; while" # as mentioned above
+eval "@() { echo @ is not a keyword; }; @"
+Errrrr.... It seems function name restriction is looser than those for variable.
+
+this is only for test
