@@ -127,13 +127,33 @@ About I/O redirection
 一个比较细致的点:
 /dev/pts /dev/tty 是(字符)流设备
 /path/to/file 是普通文件
-流设备中的数据有即时性，写入缓冲区后可立刻供消费端读取(所以未重定向的管道可以流畅地
-串联若干指令，标准流默认都指向终端设备！一旦在管道中重定向到普通文件，之后的指令无法从
-标准流中读取数据。即使你把输入流指向文件)
+流设备中的数据有即时性，写入缓冲区后可立刻供消费端读取, 这又叫做流式读写。
+(所以管道两端连接终端设备时可以流畅地串联若干指令，标准流默认都指向终端设备！
+一旦在管道中重定向到普通文件，之后的指令无法从标准流中读取数据。即使你把输入流指向文件)
 For example:
 
 tty | cat # /dev/pts/X, OK.
-tty >./out | cat  # Nothing, 'cause it write output to a file and pts stdin get nothing.
-tty >./out | cat <./out # Nothing
-tty >./out ; cat <./out # OK, but why?
+tty >./out | cat  # Nothing, 'cause it write output to a file and stdin get nothing from pts.
+tty >./out | cat <./out # Nothing, but there is a critical question
+tty >>./out | cat <./out
+# /dev/pts/X
+cat ./out
+# /dev/pts/X
+# /dev/pts/X
+interesting...
+
+tty >./out ; cat <./out # OK, but why? Explain it.
+
+回到这个关键问题：
+在shell中在管道中启动两个进程同时读写一个文件的内容，其行为究竟受什么影响？
+我认为其实是受到两个命令执行速度的影响。两个进程实际上不会共享读文件时候的偏移量。
+使用shell向linux的文件系统中写入数据，不会发生数据竞争问题，这已经经过时间验证。
+shell为管道两边的命令启动subshell并执行，然后连接他们的输出/输入。
+如果读取文件的进程执行得较快，它就能输出另一进程修改之前的文件。
+
+tty >./out | cat <./out # No output
+echo hello >./out | cat <./out # output hello; echo 是builtin, 比cat快得多
+echo hello | cat >./out | cat <./out # 偶尔能输出hello :))))
+
+如果想保证读写顺序，用&& 或 || 连接两个命令
 
