@@ -143,7 +143,6 @@ cat ./out
 interesting...
 
 tty >./out ; cat <./out # OK, but why? Explain it.
-
 回到这个关键问题：
 在shell中在管道中启动两个进程同时读或写一个文件的内容，其行为究竟受什么影响？
 我认为其实是受到两个命令执行速度的影响。两个进程实际上不会共享读写文件时的偏移量。
@@ -156,7 +155,6 @@ echo hello >./out | cat <./out # output hello; echo 是builtin, 比cat快得多
 echo hello | cat >./out | cat <./out # 偶尔能输出hello :))))
 
 如果想保证读写顺序，用&& 或 || 连接两个命令
-
 关于转义'\r'
 echo -e '     you\rkick' # yet rude
 
@@ -168,3 +166,44 @@ tar cf - . 与 tar cf /dev/stdout . 是等价的 ( of course ! )
 
 终端击键Ctrl + D，内核通知EOF,将会退出交互式shell
 EOF没有具体的ascii码值
+
+There is a personal clarification about UNIX characters...
+Ascii characters can be divided to printable and nonprintable chars;
+All printable chars have a literal meaning, as it is.
+Some of printable chars have a 'meta' meaning in certain context...
+For instance, in bash '~' is refered to $HOME, in cd '-' is refered to $OLDPWD,
+'^' and '$' are anchors in regular expression, and most importantly, they have
+profound meaning in a vim editor! :)
+Nonprintable chars are often used for change behavior of line editing.
+
+Ascii code 1-26 correspond to Ctrl+{A..Z}
+
+shell没有图形输出功能，所以shell必须与terminal结合才能构成基础的用户界面.
+shell从标准输入中获取数据，把输出打印到标准输出流，由于默认情况下，标准输入与标准输出
+都指向了终端设备，我们才能在显示器上看到输入输出的字符。
+
+GPT wisdom and lore:
+控制字符的行为由shell & terminal emulator( or console driver )共同决定。
+
+一些指令，帮助理解shell & terminal在解析控制字符时候的合作：
+$> stty -a
+intr = ^C; quit = ^\ ...
+start = ^Q; stop = ^S ...
+
+$> read -n 1
+然后尝试输入控制字符 Ctrl + [A-Z]
+Ctrl + C, Ctrl + J, Ctrl + M, Ctrl + Q, Ctrl + S, Ctrl + Z无响应
+PS: 如果使用vim terminal, Ctrl + W 后再输入 . 才有响应(why?)
+
+Ctrl + C : Interuppt 中断当前read
+Ctrl + J : Line Feed 被shell line editor捕获
+Ctrl + M : Carriage Return 同样被line editor捕获
+Ctrl + Q : Restart, 被terminal捕获？
+Ctrl + S : Stop, 被terminal捕获？
+Ctrl + Z : Suspend
+
+由此可见，简单场景下，用户通过键盘发射的原始信号经历了这样的链路：
+Keyboard MCU -> Kernel -> Terminal -> Shell -> Foreground program
+
+但为什么 Ctrl + H 可以响应???
+Ctrl + H & Ctrl + ? 可以响应，说明退格是shell内部行为, 类似vi mode?????
