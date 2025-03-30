@@ -145,11 +145,11 @@ interesting...
 tty >./out ; cat <./out # OK, but why? Explain it.
 
 回到这个关键问题：
-在shell中在管道中启动两个进程同时读写一个文件的内容，其行为究竟受什么影响？
-我认为其实是受到两个命令执行速度的影响。两个进程实际上不会共享读文件时候的偏移量。
+在shell中在管道中启动两个进程同时读或写一个文件的内容，其行为究竟受什么影响？
+我认为其实是受到两个命令执行速度的影响。两个进程实际上不会共享读写文件时的偏移量。
 使用shell向linux的文件系统中写入数据，不会发生数据竞争问题，这已经经过时间验证。
 shell为管道两边的命令启动subshell并执行，然后连接他们的输出/输入。
-如果读取文件的进程执行得较快，它就能输出另一进程修改之前的文件。
+如果读取文件的进程执行得较快，它就能输出另一进程修改之前的文件内容。
 
 tty >./out | cat <./out # No output
 echo hello >./out | cat <./out # output hello; echo 是builtin, 比cat快得多
@@ -157,3 +157,14 @@ echo hello | cat >./out | cat <./out # 偶尔能输出hello :))))
 
 如果想保证读写顺序，用&& 或 || 连接两个命令
 
+关于转义'\r'
+echo -e '     you\rkick' # yet rude
+
+yet another interesting fact of IO redirection:
+tar cf /dev/stdout . | wc -l # 输出一个数字
+tar cf `tty` . | wc -l # 输出一堆东西 然后输出0
+然后
+tar cf - . 与 tar cf /dev/stdout . 是等价的 ( of course ! )
+
+终端击键Ctrl + D，内核通知EOF,将会退出交互式shell
+EOF没有具体的ascii码值
