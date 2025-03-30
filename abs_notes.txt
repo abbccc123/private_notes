@@ -204,6 +204,18 @@ Ctrl + Z : Suspend
 
 由此可见，简单场景下，用户通过键盘发射的原始信号经历了这样的链路：
 Keyboard MCU -> Kernel -> Terminal -> Shell -> Foreground program
+我认为printable字符也是以这种方式被传输的，但是printable字符不会被terminal解释,
+可能被shell解释 ( 比如vi mode )
+在交互式shell中输入line feed后，把行缓冲区域的内容提交给shell执行，
+shell内部会对这些字符进行进一步的处理
 
 但为什么 Ctrl + H 可以响应???
 Ctrl + H & Ctrl + ? 可以响应，说明退格是shell内部行为, 类似vi mode?????
+
+为什么说 'Control characters are not normally useful inside a script.' 呢
+因为Control chars被terminal、shell的行编辑器解释执行，在非交互shell中没有特殊意义。
+
+使用\echo输出Carrige Return的三种方式:
+$> echo -e '\r' # C 转义
+$> echo $'\x0d' # Hex equivalent
+$> echo "^M"    # Ctrl-V Ctrl-M
