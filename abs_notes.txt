@@ -215,7 +215,61 @@ Ctrl + H & Ctrl + ? 可以响应，说明退格是shell内部行为, 类似vi mo
 为什么说 'Control characters are not normally useful inside a script.' 呢
 因为Control chars被terminal、shell的行编辑器解释执行，在非交互shell中没有特殊意义。
 
-使用\echo输出Carrige Return的三种方式:
+使用`echo`输出Carrige Return的三种方式:
 $> echo -e '\r' # C 转义
 $> echo $'\x0d' # Hex equivalent
 $> echo "^M"    # Ctrl-V Ctrl-M
+
+export IFS 对子进程中的shell无效
+
+chapter 4
+
+IFS分隔在 variable substitution / command substitution 时发生
+shell变量可以类比为左右值?
+
+输出 十进制 1 ~ 128 对应的ascii字符:
+for i in `seq 1 128`; do
+    h=$(printf "%x" $i)
+    v=$(echo -e "\x$h")
+    echo "$v"
+done
+yet another gpt wisdom:
+Ascii characters:
+Null		0x00
+Control chars	0x01 ~ 0x1F
+Printable	0x20 ~ 0x7E
+DEL		0x7F
+
+An example of indirect reference and position parameter:
+for i in `seq 1 10`; do
+    echo $i; done
+for i in `seq 1 10`; do
+    echo ${!i}; done
+
+IFS have an effect on command substitution & variable substitution
+
+Characters within double quote will remain literature meaning except '$' '\' and '`'
+
+Yet another example of 'quote':
+a=$'\n123\n456'
+echo "$(echo $a)"
+echo "$(echo "$a")"
+这说明了什么?
+echo "foo"$a"bar"
+
+现在有一个疑问:
+echo "\n" # output \n
+echo "\$" # output $
+那么escape会对那些chars生效呢:
+\\ \` \$ \"
+
+分辨shell转义和command转义：
+概念: 通过前缀转义符'\', 某些字符获得了不同的含义，在交互式shell中输入一行指令之后，
+首先shell会对这行指令进行转义，将参数传入command后，这些字符可能被command再度转义。
+echo '\n' # \n 两个字符作为参数传入echo
+echo -e '\n' # 同样的 \n 被传入echo, 但是echo打开了转义选项, 最终输出两个Line Feed
+
+a='abc'
+echo $a
+echo -n $a
+这说明什么?
