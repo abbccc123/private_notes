@@ -269,7 +269,7 @@ echo "\$" # output $
 echo '\n' # \n 两个字符作为参数传入echo
 echo -e '\n' # 同样的 \n 被传入echo, 但是echo打开了转义选项, 最终输出两个Line Feed
 
-a='abc'
+a='abc^H'
 echo $a
 echo -n $a
 这说明什么?
