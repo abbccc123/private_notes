@@ -269,7 +269,32 @@ echo "\$" # output $
 echo '\n' # \n 两个字符作为参数传入echo
 echo -e '\n' # 同样的 \n 被传入echo, 但是echo打开了转义选项, 最终输出两个Line Feed
 
-a='abc^H'
+a='abc^H' # ^H is Ctrl-V Ctrl-H, or $'\x08' or '\b'
 echo $a
 echo -n $a
 这说明什么?
+
+关于结构 from `man bash`
+if list; then list; [ elif list; then list; ] ... [ else list; ] fi
+list 也可以是if 语句,所以下面的代码有效:
+if if if [ c ]; then :; fi; then :; fi; then echo farboo; fi # Strike!
+这段代码也有效 ':)'
+if
+a=1
+b=2
+c=3
+((a+b\
+==c))
+then
+echo \
+1
+else
+echo \
+2
+fi
+
+When naked typed, asterisk('*') has behavior in single bracket and double bracket
+test construct.
+
+[ $a = * ] # file globbing will take place
+[[ $a = * ]] # pattern match!
