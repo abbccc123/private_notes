@@ -297,4 +297,22 @@ When naked typed, asterisk('*') has behavior in single bracket and double bracke
 test construct.
 
 [ $a = * ] # file globbing will take place
-[[ $a = * ]] # pattern match!
+[[ $a = * ]] # partial pattern match, * ? Posix classes make sense
+
+关于 "[" test command 还有一个有趣的细节:
+We have already acknowleged that ! reverse the exit state of a command,
+but what about '!' within a [ ] construct, what will happen if we combine them?
+
+[ 1 -eq 1 ] && echo True # True
+! [ 1 -eq 1] && echo True || echo False # False
+! [ ! 1 -eq 1 ] && echo True # True :)
+
+Yet another trick of test command:
+[ 1 -eq 2 -a -n "`echo true 1>&2`" ] # Output: true
+echo $? # 1
+
+Step 1: echo true 1>&2 # Command Substitution 输出True至终端
+Step 2: [ 1 -eq 2 -a -n "" ]
+
+为什么 [[ list1 && list2 ]] 符合短路原则？Why? Tell me why.
+What is the difference between '[[' and '['?
