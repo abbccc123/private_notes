@@ -316,3 +316,24 @@ Step 2: [ 1 -eq 2 -a -n "" ]
 
 为什么 [[ list1 && list2 ]] 符合短路原则？Why? Tell me why.
 What is the difference between '[[' and '['?
+
+chapter 8.2
+关于数字常量，一直以来有一个被我忽视的细节:
+a=010
+echo $a # 010
+((a=010))
+echo $a # 8
+((a=0x10))
+echo $a # 16
+((a=2#010))
+echo $a # 2
+
+分辨数字常量与$' ... ' string-expansion
+octal-based and hex-based numberial constants are used in arithmetic expressions
+
+About linux filesystem file mode:
+1. You can always check the detail throught 'man chmod'
+2. Apart from common 'r(ead) w(rite) e(xecute)' file mode, there are setuid/setgid and sticky bit.
+3. Execute mode bit in a directory file means it can be searched and entered.
+4. setuid/setgid bit is for a regular, executable file, it means other users can execute this file as is its user or group.
+5. sticky bit if for a directory, if set, only file owners can delete or rename files within this directory.
