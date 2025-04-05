@@ -332,8 +332,42 @@ echo $a # 2
 octal-based and hex-based numberial constants are used in arithmetic expressions
 
 About linux filesystem file mode:
-1. You can always check the detail throught 'man chmod'
+1. You can always check the detail through 'man chmod'
 2. Apart from common 'r(ead) w(rite) e(xecute)' file mode, there are setuid/setgid and sticky bit.
 3. Execute mode bit in a directory file means it can be searched and entered.
 4. setuid/setgid bit is for a regular, executable file, it means other users can execute this file as is its user or group.
 5. sticky bit if for a directory, if set, only file owners can delete or rename files within this directory.
+
+chapter 9
+
+关于builtin variables:
+$> set 
+该命令可以输出所有内建的环境变量,假设想查看BASH开头的所有内建环境变量，可以执行
+$> set | grep '^BASH'
+
+printf命令默认对入参执行C风格转义
+
+Yet ANOTHER GPT wisdom:
+I wanna to know the difference and precedence of "shell alias, keyword, builtin, hashed command and external command"
+
+First hashed command is a typed command which will be memorized by shell, next time when invoke this command, shell will use its memory, instead of searching PATH.
+严格说来, builtin 和 external binary 才算是command吧！
+
+MAX PRECEDENCE
+alias
+keyword
+builtin function
+hashed command
+external command
+MIN PRECEDENCE
+
+alias if='echo hahahahahah'
+$> if # hahahahahah
+unalias if
+$> if # will not output anything
+$> if() # syntax error
+
+别名(alias)优先级最高，它不是command
+关键字(keyword)拥有语义，构成shell语法结构,也不是command
+内建命令(builtin)是shell实现的若干功能，为了减少子进程创建开销(每次执行external command都会拉起外部进程)
+缓存命令(hashed command)，当一个命令被执行之后，shell会记录这个命令的位置，下次调用时就会使用缓存的路径而不是再次查询。
