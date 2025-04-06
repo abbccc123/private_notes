@@ -371,3 +371,45 @@ $> if() # syntax error
 关键字(keyword)拥有语义，构成shell语法结构,也不是command
 内建命令(builtin)是shell实现的若干功能，为了减少子进程创建开销(每次执行external command都会拉起外部进程)
 缓存命令(hashed command)，当一个命令被执行之后，shell会记录这个命令的位置，下次调用时就会使用缓存的路径而不是再次查询。
+
+Difference between $EUID and $UID
+EUID stands for Effective UID, it shows who are running this shell script.
+但是在现代unix-like系统的脚本中无法区分EUID和UID,容易被提权攻击
+所以似乎EUID is useless...
+
+关于$* $@ and 变量展开
+set "a                  b" c # set positional parameter
+for i in $*; do echo $i; done
+for i in $@; do echo $i; done
+for i in $@; do echo "$i"; done
+for i in $*; do echo "$i"; done
+
+for i in "$*"; do echo $i; done
+for i in "$*"; do echo "$i"; done
+for i in "$@"; do echo $i; done
+for i in "$@"; do echo "$i"; done
+
+$> IFS=$'\n'
+$> a=$'a\nb\nc\nd\n'
+$> echo $a
+$> echo "$a"
+
+If the variable is expanded without double quoted, it will be separated through $IFS,
+the result strings will be concatenated with a single space. THEN PASSED TO COMMAND?
+
+"$*":
+结果是把所有形参用IFS中的第一个字符拼起来的字符串
+$> set a b  b    c     c       c
+$> IFS='^'
+$> echo "$*" # a^b^b^c^c^c
+
+$> set "a" "b b" "c c c"
+$> IFS='^'
+$> echo "$*" # a^b b^c c c
+
+$*:
+
+# Todo: Compare
+# $> IFS='^'
+# $> set a b^b c c^c
+# $> set a "b^b" "c c^c"
