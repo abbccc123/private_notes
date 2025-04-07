@@ -413,3 +413,41 @@ $*:
 # $> IFS='^'
 # $> set a b^b c c^c
 # $> set a "b^b" "c c^c"
+# $> a="a b^b c c^c"
+# $> echo $a
+# $> echo "$a"
+# $> for i in $a; do echo $i; done
+
+IFS_ARR=( $'^' $' ^' )
+for iter in ${IFS_ARR[@]} ...
+for iter in "${IFS_ARR[@]}" ...
+for iter in "${IFS_ARR[*]}" ...
+有什么不同之处
+Compare it with positional parameters, what can we conclude?
+
+Positional parameters puzzles :)
+
+IFS=$'\n \t' # Just adjust the order of original IFS
+set a 'b^b' '' 'c c^c'
+
+echo $*
+echo "$*"
+echo $@
+echo "$@"
+v=$*
+echo "$v"
+echo $v
+v="$*"
+echo "$v"
+echo $v
+v=$@
+echo "$v"
+echo $v
+v="$@"
+echo "$v"
+echo $v
+
+Observation 1: "$*" 会把所有parameters用第一个IFS拼接起来, "$@"保留了其作为数组的性质
+证据:
+arr=( "$*" ) ; echo ${#arr[@]}; # 1
+arr=( "$@" ) ; echo ${#arr[@]}; # 4
