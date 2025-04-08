@@ -451,3 +451,31 @@ Observation 1: "$*" 会把所有parameters用第一个IFS拼接起来, "$@"保�
 证据:
 arr=( "$*" ) ; echo ${#arr[@]}; # 1
 arr=( "$@" ) ; echo ${#arr[@]}; # 4
+
+关于 [[ =~ ]] 结构: 右侧的extended regular expression被引用后可能产生错误的结果!
+$> [[ heheda =~ ^h ]] && echo "Matched!" || echo "Not matched!" # Matched!
+$> [[ heheda =~ "^h" ]] && echo "Matched!" || echo "Not matched!" # Not matched!
+
+Tilde expansion的条件:
+echo ~ # ok
+echo ~/ # ok
+echo ~a # ~a
+echo a~ # ok
+
+Yet another gpt wisdom:
+The order of shell expansion:
+Brace expansion
+tilde expansion
+variable expansion
+arithmetic expansion
+command substitution
+process substitution
+word splitting
+filename globbing
+quote removal
+
+关于positional parameters的一个神奇现象:
+$> set a bb ccc
+$> echo ${@:2} # bb ccc
+$> a=( $@ )
+$> echo ${a[@]:2} # ccc
