@@ -466,7 +466,7 @@ Yet another gpt wisdom:
 The order of shell expansion:
 Brace expansion
 tilde expansion
-variable expansion
+variable expansion / parameter substitution
 arithmetic expansion
 command substitution
 process substitution
@@ -479,3 +479,6 @@ $> set a bb ccc
 $> echo ${@:2} # bb ccc
 $> a=( $@ )
 $> echo ${a[@]:2} # ccc
+
+${var:=DEFAULT} will set var is it is unset
+${var:-DEFAULT} will not
