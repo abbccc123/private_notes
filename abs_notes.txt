@@ -490,3 +490,11 @@ $> echo * # 列出**当前**目录下的所有文件。
 $> cd /; echo *; # 列出**/**下的所有文件。
 Is this a type of parametering?
 The value of '*' varies on different directories, but a variable will keep its value regardless of its current working dir.
+
+command substitution will remove all LineFeeds of the output.
+
+Pattern rule in parameter substitution is different from posix regular expression.
+Pattern:
+* : Any characters
+? : Exactly one character
+[ ... ] : Character class
