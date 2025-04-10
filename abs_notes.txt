@@ -482,3 +482,11 @@ $> echo ${a[@]:2} # ccc
 
 ${var:=DEFAULT} will set var is it is unset
 ${var:-DEFAULT} will not
+
+About parameterized:
+Consider the difference between a shell variable and parameter.
+考虑filename globbing的场景:
+$> echo * # 列出**当前**目录下的所有文件。
+$> cd /; echo *; # 列出**/**下的所有文件。
+Is this a type of parametering?
+The value of '*' varies on different directories, but a variable will keep its value regardless of its current working dir.
