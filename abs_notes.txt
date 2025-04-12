@@ -500,3 +500,28 @@ Pattern:
 [ ... ] : Character class
 
 for ((;;)); do : ENTERNAL LOOP ; done
+
+In case / esac construct, words will not be splitted?
+So I am wondering, in which case, the word splitting will take place.
+
+Use variable / parameter / command substitution without quoting will lead to word splitting.
+Use these techniques with in case / esac and [[ ]] double bracket will NOT.
+
+What about POSIX ranges?
+
+Exercise:
+列出/bin/下所有包含三个任意字符的executable binary.
+$> ls /bin/???
+
+列出/bin/下包含三个大小写英文字母的executable binary.
+$> ls /bin/[[:alpha:]][[:alpha:]][[:alpha:]] # 1
+$> ls /bin/ | grep -E '^[a-zA-Z]{3,3}$' # What is the difference between this one and above one?
+区别在于ls的行为:
+ls /path/to/file # list the file full path
+ls /path/to/dir  # list all files in the dir, without prefix dirname
+略施小计:
+$> ls /bin/* | grep -E '/[a-zA-Z]{3,3}$'
+有没有可能被hack呢?
+
+Conclusion:
+In bash, posix regular expression will not work in file globbing, but posix character ranges will.
