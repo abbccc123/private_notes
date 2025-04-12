@@ -1,6 +1,11 @@
 # On March 25, 2025, I had read 70% of ABS guide,
 # then I realized that I needed to read it again and take as many notes as possible.
-# IMPORTANT MATERIAL AND TOOLS: ABS-GUIDE, MAN BASH, INFO BASH, GPT, MY INTELLIGENCE
+# IMPORTANT MATERIAL AND TOOLS: ABS-GUIDE, MAN BASH, INFO BASH, BASH SOURCE CODE, GPT, MY INTELLIGENCE
+
+4/13/25补充:
+Shell programming works like a glue which piece together all components of my system.
+Writing shell script can also be likened to do orchestration.
+So I need to learn bash as well as UNIX commands.
 
 chapter 1 Introduction
 
@@ -552,3 +557,30 @@ The word is expanded using tilde expansion, parameter and variable expansion, ar
 
 Yet another question!
 Will 'echo' do extra process to manupulate its input? NO, unless '-e' is passed to it.
+
+Variable substitution的结果是一个关键字会怎样呢?
+$> a=if
+$> $a [ 1 = 1 ]; then echo ok! ; fi
+# BOOOOOOOM!
+说明变量替换在词法分析之后？
+Meanwhile,
+$> alias a=if
+$> a [ 1 = 1 ]; then echo ok !; fi
+# ok !
+说明别名展开在词法分析之前?
+
+Variable assignment中，shell expansion的情况:
+Brace expansion			    NO
+Tilde expansion			    YES
+Variable / Parameter substitution   YES
+Arithmetic subsitution		    YES
+Command substitution		    YES
+Process substitution		    YES
+Word splitting			    NO
+Filename globbing		    YES
+Quote removal			    NO NEED?
+
+一种列出当前目录下含有'不寻常'字符的文件名的方法, 很秀
+$> ls *[^[:alnum:]]*
+然后与这个做比较:
+$> echo *[^[:alnum:]]*
