@@ -1,5 +1,6 @@
 # On March 25, 2025, I had read 70% of ABS guide,
 # then I realized that I needed to read it again and take as many notes as possible.
+# IMPORTANT MATERIAL AND TOOLS: ABS-GUIDE, MAN BASH, GPT, MY INTELLIGENCE
 
 chapter 1 Introduction
 
@@ -525,3 +526,26 @@ $> ls /bin/* | grep -E '/[a-zA-Z]{3,3}$'
 
 Conclusion:
 In bash, posix regular expression will not work in file globbing, but posix character ranges will.
+
+Can we parameterize case-branch items?
+a="just a variable"
+b=just
+case $a in
+    $b*) echo ok;;
+esac
+# ok
+but,
+case $a in
+    "$b*") echo ok;;
+esac
+# Nok, 'cause of the escaped asterisk
+Conclude: Pattern matching takes place in case-esac construct.
+
+What\'s more
+case a b c in  # Error message, 字面量不可以被whitespaces分隔
+
+Let\'s have a look at the definition of case-esac construct from 'man bash':
+case word in [ [(] pattern [ | pattern ] ... ) list ;; ] ... esac
+As it describes:
+The word is expanded using tilde expansion, parameter and variable expansion, arithmetic expansion, command substituion, process substitution and quote removal.
+*brace expansion , file globbing , word splitting* are absent.
