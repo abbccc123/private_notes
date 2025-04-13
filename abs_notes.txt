@@ -5,7 +5,7 @@
 4/13/25补充:
 Shell programming works like a glue which piece together all components of my system.
 Writing shell script can also be likened to do orchestration.
-So I need to learn bash as well as UNIX commands.
+So I need to learn bash as well as common UNIX commands.
 
 chapter 1 Introduction
 
@@ -581,6 +581,8 @@ Filename globbing		    YES
 Quote removal			    NO NEED?
 
 一种列出当前目录下含有'不寻常'字符的文件名的方法, 很秀
-$> ls *[^[:alnum:]]*
+$> ls *[^[:alnum:].]*
 然后与这个做比较:
-$> echo *[^[:alnum:]]*
+$> echo *[^[:alnum:].]*
+
+Any character may appear in a linux-filesystem filename except a slash, \'cause it is a path separator
