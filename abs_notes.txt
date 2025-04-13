@@ -586,3 +586,20 @@ $> ls *[^[:alnum:].]*
 $> echo *[^[:alnum:].]*
 
 Any character may appear in a linux-filesystem filename except a slash, \'cause it is a path separator
+
+Part 4 Commands
+for is a keyword, but break and continue and return are builtin...
+What is POSIX character class and POSIX regular expression.
+
+Tell the difference between GNU tar and GNU ar.
+From GPT:
+tar can do file compressed as well as archive, ar can only do archive.
+However, tar is mainly used of archiving user file and do system migration,
+ar is mainly used for modifying static linked library.
+
+About parameters of \'basename\' and filename globbing of bash:
+$> pushd `mktemp -d` ; touch a b ; basename * ; popd ; # ok
+$> pushd `mktemp -d` ; touch a b c ; basename * ; popd ; # Error occurs, why?
+
+$> enable # list all bash builtin commands as well as their status
+enable is a bash builtin that controls the behavior of other builtins
