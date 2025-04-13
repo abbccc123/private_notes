@@ -601,5 +601,7 @@ About parameters of \'basename\' and filename globbing of bash:
 $> pushd `mktemp -d` ; touch a b ; basename * ; popd ; # ok
 $> pushd `mktemp -d` ; touch a b c ; basename * ; popd ; # Error occurs, why?
 
-$> enable # list all bash builtin commands as well as their status
-enable is a bash builtin that controls the behavior of other builtins
+$> enable # list all bash builtin commands as well as their status enable is a bash builtin that controls the behavior of other builtins
+
+前台进程组概念:
+交互式shell维护的前台进程列表，键盘输入Ctrl-C后，终端发送内核级的INTERRUPT信号，顶层shell终止前台进程组内的所有进程。
