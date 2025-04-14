@@ -618,3 +618,9 @@ $> echol "$REPLY" #                        here
 
 Note the space in the above output.
 Consider changing the value of IFS to avoid word splitting in read command.
+
+What is the predence of a shell function ?
+I can confirm that it is less than a alias, but what about keyword, builtin and external command?
+It is impossible to declare a function which uses a keyword as its name.
+Predence(maybe):
+alias > keyword > function > builtin > hashed command > external command searching from $PATH
