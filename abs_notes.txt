@@ -1,6 +1,7 @@
 # On March 25, 2025, I had read 70% of ABS guide,
 # then I realized that I needed to read it again and take as many notes as possible.
 # IMPORTANT MATERIAL AND TOOLS: ABS-GUIDE, MAN BASH, INFO BASH, BASH SOURCE CODE, GPT, MY INTELLIGENCE
+# Always check bash manner to acknowledge exact definition of bash components.
 
 4/13/25补充:
 Shell programming works like a glue which piece together all components of my system.
@@ -605,3 +606,15 @@ $> enable # list all bash builtin commands as well as their status enable is a b
 
 前台进程组概念:
 交互式shell维护的前台进程列表，键盘输入Ctrl-C后，终端发送内核级的INTERRUPT信号，顶层shell终止前台进程组内的所有进程。
+
+About a weird behavior of read builtin:
+$> read var
+			here
+$> echo "$var" # here
+
+$> read
+			here without specify a name
+$> echol "$REPLY" #                        here
+
+Note the space in the above output.
+Consider changing the value of IFS to avoid word splitting in read command.
