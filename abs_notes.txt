@@ -624,3 +624,23 @@ I can confirm that it is less than a alias, but what about keyword, builtin and 
 It is impossible to declare a function which uses a keyword as its name.
 Predence(maybe):
 alias > keyword > function > builtin > hashed command > external command searching from $PATH
+
+Distinguish special filesystem components and shell environment variables and shell builtin.
+. ( dot ) , $PWD , pwd
+
+The contents in a tarball is relatively packaged.
+It can be likened to a filesystem tree, when successfully untar, the two trees merge into one.
+Let\'s consider an example
+~/tmp $> ls # Assume we have three common files named a, b, c
+a b c
+~/tmp $> tar cf tarball .
+~/tmp $> tar tf tarball
+a
+b
+c
+~/tmp $> tar cf tarball2 ../tmp
+~/tmp $> tar tf tarball2
+tmp/
+tmp/a
+tmp/b
+tmp/c
