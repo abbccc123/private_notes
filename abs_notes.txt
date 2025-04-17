@@ -578,7 +578,7 @@ Arithmetic subsitution		    YES
 Command substitution		    YES
 Process substitution		    YES
 Word splitting			    NO
-Filename globbing		    YES
+Filename globbing		    NO
 Quote removal			    NO NEED?
 
 一种列出当前目录下含有'不寻常'字符的文件名的方法, 很秀
