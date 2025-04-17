@@ -628,6 +628,11 @@ alias > keyword > function > builtin > hashed command > external command searchi
 Distinguish special filesystem components and shell environment variables and shell builtin.
 . ( dot ) , $PWD , pwd
 
+$> ln -s ~ ./point_to_home
+$> cd point_to_home
+$> echo $PWD
+$> pwd
+
 The contents in a tarball is relatively packaged.
 It can be likened to a filesystem tree, when successfully untar, the two trees merge into one.
 Let\'s consider an example
@@ -644,3 +649,11 @@ tmp/
 tmp/a
 tmp/b
 tmp/c
+
+About current working directory:
+Every process has its cwd, which inherits from parent process.
+Change the cwd of child will not influence parent.
+$> ( cd / ; echo `pwd` ; )
+$> pwd
+
+On arithmetic, use 'let' and '(())' construct instead of 'expr', just \'cause let is a builtin
