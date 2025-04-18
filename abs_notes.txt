@@ -655,7 +655,30 @@ Every process has its cwd, which inherits from parent process.
 Change the cwd of child will not influence parent.
 $> ( cd / ; echo `pwd` ; )
 $> pwd
-
 On arithmetic calculation, use 'let' and '(())' construct instead of 'expr', just \'cause let is a builtin, (()) is a keyword structure
 
+Maybe the main use scene of 'eval' is executing parameterized commands.
+Use eval to implement indirect variable assignment.
 
+$> a=1 # ok
+$> b=a
+$> $b=2
+bash: a=2: command not found
+
+It is clear that assignment statement is different from running commands in shell!
+
+$> b=a
+$> eval "$b"=3
+$> echo $a
+3
+Parameterized code generation!
+
+From abs:
+The eval command can be used to parameterize brace expansion.
+Because brace expansion is happening before variable substitution!
+$> a=1 b=10
+$> echo {${a}..${b}}
+{1..10}
+$> a=1 b=10
+$> eval echo {${a}..${b}}
+1 2 3 4 5 6 7 8 9 10
