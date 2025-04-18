@@ -657,3 +657,5 @@ $> ( cd / ; echo `pwd` ; )
 $> pwd
 
 On arithmetic calculation, use 'let' and '(())' construct instead of 'expr', just \'cause let is a builtin, (()) is a keyword structure
+
+
