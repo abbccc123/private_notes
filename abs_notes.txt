@@ -682,3 +682,12 @@ $> echo {${a}..${b}}
 $> a=1 b=10
 $> eval echo {${a}..${b}}
 1 2 3 4 5 6 7 8 9 10
+
+sharp('#') is interpretered as the start notion of a comment, following chars will be ignored,
+this step is taking place upon lexical analysis, before command execution.
+
+word splitting会对字面量生效么？
+对字面量的分割是否在lexical analysis阶段就已完成？
+
+Gpt wisdom:
+Escaping takes place on lexical analysis.
