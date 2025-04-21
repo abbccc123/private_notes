@@ -687,7 +687,9 @@ sharp('#') is interpretered as the start notion of a comment, following chars wi
 this step is taking place upon lexical analysis, before command execution.
 
 word splitting会对字面量生效么？
-对字面量的分割是否在lexical analysis阶段就已完成？
+对字面量的分隔是否在lexical analysis阶段就已完成？
 
 Gpt wisdom:
 Escaping takes place on lexical analysis.
+
+Can not directly export bash arrays to subprocess.
