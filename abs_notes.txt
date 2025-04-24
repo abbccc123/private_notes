@@ -693,3 +693,11 @@ Gpt wisdom:
 Escaping takes place on lexical analysis.
 
 Can not directly export bash arrays to subprocess.
+
+A personal viewpoint of 'arguments' of command interpreter, with help of gpt, of course.
+Command line arguments: all words passed to shell, considering them as a string list
+Positional parameters: parsed arguments, which can be used in a command line or script
+Command line options: parsed again arguments, always have special meanings
+
+Punctuation builtin:
+. ( source ) , : ( colon no-op ) , [ ( test )
