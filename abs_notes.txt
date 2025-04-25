@@ -701,3 +701,17 @@ Command line options: parsed again arguments, always have special meanings
 
 Punctuation builtin:
 . ( source ) , : ( colon no-op ) , [ ( test )
+
+About bash FUNCNAME variable:
+$> a () { echo ${FUNCNAME[@]} ; }
+$> b () { a ; }
+$> b
+a b
+
+区分命令执行环境 & 上下文环境
+The 'command execution environment' aspect correspond to a subprocess, whereas context environment correspond to a inner process behavior
+Command execution environment contains:
+Open files ( file description ), cwd, file creation mode, kernel signal traps,
+shell parameters and functions, shell options, shopt options, alias..
+
+Context environment 告诉用户这行命令现在在何处执行, 概念类似call stack
