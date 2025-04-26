@@ -708,7 +708,7 @@ $> b () { a ; }
 $> b
 a b
 
-区分命令执行环境 & 上下文环境
+区分命令执行环境 & 进程上下文环境
 The 'command execution environment' aspect correspond to a subprocess, whereas context environment correspond to a inner process behavior
 Command execution environment contains:
 Open files ( file description ), cwd, file creation mode, kernel signal traps,
