@@ -715,3 +715,9 @@ Open files ( file description ), cwd, file creation mode, kernel signal traps,
 shell parameters and functions, shell options, shopt options, alias..
 
 Context environment 告诉用户这行命令现在在何处执行, 概念类似call stack
+
+Why did Bash introduce the 'shopt' command instead of just using 'set'?
+Gpt wisdom:
+set [ builtin ] controls more historical shell behavior
+shopt [ builtin ] controls more experimental bash functions
+一句话: set / shopt 分别对应Posix兼容性功能开关与实验性功能开关
