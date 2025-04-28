@@ -700,7 +700,7 @@ Positional parameters: parsed arguments, which can be used in a command line or 
 Command line options: parsed again arguments, always have special meanings
 
 Punctuation builtin:
-. ( source ) , : ( colon no-op ) , [ ( test )
+. ( source ) , : ( colon no-op ) , \[ ( test )
 
 About bash FUNCNAME variable:
 $> a () { echo ${FUNCNAME[@]} ; }
@@ -721,3 +721,17 @@ Gpt wisdom:
 set [ builtin ] controls more historical shell behavior
 shopt [ builtin ] controls more experimental bash functions
 一句话: set / shopt 分别对应Posix兼容性功能开关与实验性功能开关
+
+Note: '!' is not a shell builtin but is a keyword.
+
+A usage of builtin bind, assume that vi readline mode is on.
+$> bind -m vi-insert '"\C-b": "\C-ucd ..\n"' # Hot-key to cd back to parent dir quickly.
+# Play with bash's readline library
+
+用 dotfile + symlink + git 目录管理配置文件, 感觉是个不错的实践。
+
+Using wait with only one background job is SYNCHRONOUS,
+Using wait with multi background jobs is ASYNCHRONOUS.
+
+
+Call external command in a startup script is not a good practice.
