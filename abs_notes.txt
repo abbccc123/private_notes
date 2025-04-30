@@ -733,5 +733,42 @@ $> bind -m vi-insert '"\C-b": "\C-ucd ..\n"' # Hot-key to cd back to parent dir 
 Using wait with only one background job is SYNCHRONOUS,
 Using wait with multi background jobs is ASYNCHRONOUS.
 
-
 Call external command in a startup script is not a good practice.
+
+[ MAN BASH KNOWLEDGE ]:
+
+How to determine whether 'i' option in $-?
+Approach 1 : [[ $- =~ i ]] && echo "Contains"
+Approach 2 : echo $- | grep -q i && echo "Contains"
+Approach 3 : [[ $- == *i* ]] && echo "Contains"
+Approach 4 : case $- in *i*) echo "Contains" ;; esac
+
+simple command is a special case of a pipeline?
+
+Shell grammar list:
+A list is a sequence of one or more pipelines separated by one of the operators...
+That means, wherever a LIST shows in a grammar, it CAN contain one or more pipelines.
+
+About multi && || behavior in shell grammar:
+&& || 构成了shell list, 所有&& ||按从左到右的顺序解析, \'cause they have same precedence.
+An example:
+true && true || false && false ; echo $?
+1
+
+true && true || false && false
+|	   |
++--  0   --+
+
+true && true || false && false
+|		    |
++--      0        --+
+Note: 由于短路性质，false不执行
+
+true && true || false && false
+|			     |
++--           1            --+
+
+Tell difference behavior of logical operators between Shell and C.
+
+shell处理: 首先基于meta characters把文本分割为基本的语法单元，比如list, pipelines, command,
+然后再通过keywords组织起语法结构? 然后展开,最后执行
