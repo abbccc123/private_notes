@@ -772,3 +772,20 @@ Tell difference behavior of logical operators between Shell and C.
 
 shell处理: 首先基于meta characters把文本分割为基本的语法单元，比如list, pipelines, command,
 然后再通过keywords组织起语法结构? 然后展开,最后执行
+
+'+=' stands for appending to shell variable and arrays
+$> a=1
+$> a+=2
+$> echo $a
+12
+
+$> a=(1 2)
+$> a+=(3)
+$> echo "${a[@]}"
+1 2 3
+
+Differ shell parameter and variable:
+Any entity associated to a value is a parameter.
+Variable is a name that stores a variable,
+so it is a kind of parameter.
+Besides of variable, there are positional parameters and special character parameters.
