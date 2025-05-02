@@ -786,6 +786,5 @@ $> echo "${a[@]}"
 
 Differ shell parameter and variable:
 Any entity associated to a value is a parameter.
-Variable is a name that stores a variable,
-so it is a kind of parameter.
-Besides of variable, there are positional parameters and special character parameters.
+Variable is a name that stores a variable, so it is a kind of parameter.
+Besides variable, there are positional parameters and special character parameters.
