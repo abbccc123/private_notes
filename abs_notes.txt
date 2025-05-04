@@ -809,3 +809,5 @@ $((1+1))
 $> a='*'
 $> echo $a
 ( all files in current working directory )
+
+The order of tilda expansion, parameter substitution, arithmetic substitution and command substituion depends on nesting.
