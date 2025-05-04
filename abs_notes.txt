@@ -788,3 +788,24 @@ Differ shell parameter and variable:
 Any entity associated to a value is a parameter.
 Variable is a name that stores a variable, so it is a kind of parameter.
 Besides variable, there are positional parameters and special character parameters.
+
+$SHLVL: subshell不受影响
+ 
+The output of top command in non-interactive mode will be affected by COLUMNS parameter
+$> COLUMNS=20 top -bcn1 | less
+
+
+From bash mannal:
+The  order  of expansions is: brace expansion; tilde expansion, parameter and vari‐
+able expansion, arithmetic expansion, and command substitution (done in a  left-to-
+right fashion); word splitting; and pathname expansion.
+
+tilde expansion, parameter & variable expansion, arithmetic expansion and command substitution take place simultaneously.
+
+$> a='$((1+1))'
+$> echo $a
+$((1+1))
+
+$> a='*'
+$> echo $a
+( all files in current working directory )
