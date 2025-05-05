@@ -811,3 +811,7 @@ $> echo $a
 ( all files in current working directory )
 
 The order of tilda expansion, parameter substitution, arithmetic substitution and command substituion depends on nesting.
+
+Note that if no expansion occurs, no splitting is performed.
+$> echo a                   b
+a b # 在词法分析？阶段就已完成。
