@@ -815,3 +815,44 @@ The order of tilda expansion, parameter substitution, arithmetic substitution an
 Note that if no expansion occurs, no splitting is performed.
 $> echo a                   b
 a b # 在词法分析？阶段就已完成。
+
+Here document: \<<- will strip leading tabs of lines
+
+From bash manual, a function\'s body is a LIST.
+far()
+{
+    val=boo
+}
+$> far
+$> echo $val # boo
+
+In the mean time,
+boo()
+(
+    val=boo
+) # Is valid!
+$> boo
+$> echo $val # nothing.
+
+考虑一个有趣的例子
+$ a="echo barfoo"
+$ $a
+barfoo
+
+whereas...
+
+$ bar=foo
+$ a="sh -c \"echo \$bar\""
+$ $a
+$bar" ... unexpected EOF while looking for matching "
+考虑single command的展开、执行过程
+
+kill 0: 杀死所有当前进程组里的进程
+
+在tilix这种多路复用终端模拟器中退出一个shell不会导致内核发送SIGHUP, 把整个窗口关掉才会。
+所以
+$ sleep 666 &
+$ exit
+这样sleep进程还在后台运行，但是如果把tilix窗口关闭就会导致进程退出。
+$ sleep 666 & disown
+避免退出。(Thanks, GPT)
