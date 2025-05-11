@@ -856,3 +856,10 @@ $ exit
 这样sleep进程还在后台运行，但是如果把tilix窗口关闭就会导致进程退出。
 $ sleep 666 & disown
 避免退出。(Thanks, GPT)
+
+job control different behavior in interactive and non-interactive shell.
+Intractive shell: Every background job has its own process group id
+Non-intractive shell: Every background job has same pgid as the intepreter.
+So kill 0 will take effect.
+
+Job control is not enabled in non-interactive shell by default.
