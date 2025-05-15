@@ -863,3 +863,5 @@ Non-intractive shell: Every background job has same pgid as the intepreter.
 So kill 0 will take effect.
 
 Job control is not enabled in non-interactive shell by default.
+
+EOF或exit方式退出shell不会触发SIGHUP, 强制关闭终端模拟器窗口会触发SIGHUP
