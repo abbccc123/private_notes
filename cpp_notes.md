@@ -27,3 +27,21 @@ Single-line nested namespace declarations
 namespace: Avoid collipsion. However, it sometimes leads to messy codes.
 
 考虑可见性的应用。
+
+三种static storage duratino ->
+
+smart pointer是为了解决什么问题? 对动态资源的智能管理，自动析构。
+
+learncpp.com
+
+基本类型的运算符不可以重载
+
+Prefer to use 'type var { value }' instead of 'type var = value' in basic types context.
+
+进程在内存中占用的五个区域:
+text segment | bss segment | data segment | heap segment | stack segment
+
+Most people learn as much or more from following the examples as they do from reading the text.
+少部分天才可以越过这一步
+
+Member functions can also be (forward) declared inside the class definition, and defined after the class definition.

@@ -865,3 +865,17 @@ So kill 0 will take effect.
 Job control is not enabled in non-interactive shell by default.
 
 EOF或exit方式退出shell不会触发SIGHUP, 强制关闭终端模拟器窗口会触发SIGHUP
+
+type time
+type times
+Compare the above two tokens.
+
+Redirection must be presented before single-ampersand token(which is used to move the job to the background).
+
+[[ 1 -le word ]] && echo BAR! ;
+a=1
+b=2
+[[ a -le b ]] && echo true # output true
+Conclusion: Shell variables will be automatically expanded in arithmeic comparasion context.
+
+
