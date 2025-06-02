@@ -878,4 +878,7 @@ b=2
 [[ a -le b ]] && echo true # output true
 Conclusion: Shell variables will be automatically expanded in arithmeic comparasion context.
 
-
+File size format( from le --help ):
+Single alphabet letter, e.g. K M G T
+1K  = 1024 Byte
+1KB = 1000 Byte
