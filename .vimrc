@@ -28,11 +28,11 @@ set guifont=Source\ Code\ Pro\ Medium\ 13
 "set cindent tabstop=2
 set cindent shiftwidth=4
 set softtabstop=4
+set expandtab
 set hlsearch
 set incsearch
 set scrolloff=99
 set showcmd
-
 set backup
 set splitbelow
 set splitright
@@ -75,10 +75,20 @@ nnoremap <space>k :terminal<enter><C-W>K
 nnoremap <space>j :terminal<enter><C-W>J
 nnoremap <space>h :terminal<enter><C-W>H
 nnoremap <space><space> :terminal<enter>
+
+" [shortcut] move among windows
+nnoremap <tab> <C-w>
+tnoremap <tab>h <C-w>h
+tnoremap <tab>j <C-w>j
+tnoremap <tab>k <C-w>k
+tnoremap <tab>l <C-w>l
+
 nnoremap K k
 
+" [shortcut] quick save
 inoremap <C-C> <C-C>:w<enter>
 
+" [shortcut] new terminal in termianl mode
 tnoremap <c-w>t <c-w>:terminal<enter>
 
 autocmd BufNewFile *.cpp 0r ~/.vim/skeleton.cpp
