@@ -1,64 +1,254 @@
-#
-# ~/.bashrc
-#
+#!/bin/bash
 
-set -o vi # Enable vi hotkeys in interactive shell.
-echo '''
-+-------------------------+
-|stay calm, keep organized|
-+-------------------------+
-Keep fitting every day!
-'''
+# Based on Emmanuel Rouat's .bashrc
 
-# If not running interactively, don't do anything
-[[ $- != *i* ]] && return
+[[ $- != *i* ]] && exit
 
+[[ -f /etc/bash.bashrc ]] && . /etc/bash.bashrc
+
+alias   debug="set -o nounset; set -o xtrace"
+alias nodebug="set +o nounset; set +o xtrace"
+
+ulimit -S -c0
+
+set -o vi
+set -o notify
+set -o noclobber
+
+shopt -s cdspell
+shopt -s dirspell
+shopt -s cdable_vars
+shopt -s checkhash
+shopt -s checkwinsize
+shopt -s sourcepath
+shopt -s no_empty_cmd_completion
+shopt -s cmdhist
+shopt -s histappend histreedit histverify
+shopt -s huponexit
+shopt -s extglob
+
+shopt -u mailwarn
+
+# Normal Colors
+Black='\e[0;30m'        # Black
+Red='\e[0;31m'          # Red
+Green='\e[0;32m'        # Green
+Yellow='\e[0;33m'       # Yellow
+Blue='\e[0;34m'         # Blue
+Purple='\e[0;35m'       # Purple
+Cyan='\e[0;36m'         # Cyan
+White='\e[0;37m'        # White
+
+# Bold
+BBlack='\e[1;30m'       # Black
+BRed='\e[1;31m'         # Red
+BGreen='\e[1;32m'       # Green
+BYellow='\e[1;33m'      # Yellow
+BBlue='\e[1;34m'        # Blue
+BPurple='\e[1;35m'      # Purple
+BCyan='\e[1;36m'        # Cyan
+BWhite='\e[1;37m'       # White
+
+# Background
+On_Black='\e[40m'       # Black
+On_Red='\e[41m'         # Red
+On_Green='\e[42m'       # Green
+On_Yellow='\e[43m'      # Yellow
+On_Blue='\e[44m'        # Blue
+On_Purple='\e[45m'      # Purple
+On_Cyan='\e[46m'        # Cyan
+On_White='\e[47m'       # White
+NC="\e[m"               # Color Reset
+ALERT=${BWhite}${On_Red} # Bold White on red background
+
+######################################################## motd
+echo -e "${BCyan}BASH ${BRed}${BASH_VERSION%.*}${BCyan}\
+ - DISPLAY on ${BRed}$DISPLAY${NC}\n"
+date
+type -t fortune |& grep file &>/dev/null && {
+    fortune -s
+} || {
+    echo -e "${Yellow}It seems that you have not\
+installed fortune, why not?${NC}"
+}
+########################################################
+
+###################################################################### Prompt
+if [[ -n ${SSH_CONNECTION} ]]; then
+    conn_color=${Green}
+elif [[ "${DISPLAY%%:0*}" != "" ]]; then
+    conn_color=${ALERT}
+else
+    conn_color=${BCyan}
+fi
+
+if [[ ${USER} == "root" ]]; then
+    user_color=${Red}
+elif [[ ${USER} != $(logname) ]]; then
+    user_color=${BRed}
+else
+    user_color=${BCyan}
+fi
+
+# Get appropriate color regarding to cpu load
+load_color ()
+{
+    local n_cpu s_load m_load l_load sysload
+
+    n_cpu=`grep -c 'processor' /proc/cpuinfo`
+    s_load=$(( 100 * ${n_cpu} ))
+    m_load=$(( 150 * ${n_cpu} ))
+    l_load=$(( 200 * ${n_cpu} ))
+
+    sysload=`cut -d' ' -f1 /proc/loadavg | tr -d '.'`
+    sysload=$(( 10#$sysload ))
+
+    if      (( sysload > l_load )); then
+        echo -ne ${ALERT}
+    elif    (( sysload > m_load )); then
+        echo -ne ${Red}
+    elif    (( sysload > s_load )); then
+        echo -ne ${Yellow}
+    else
+        echo -ne ${Blue}
+    fi
+}
+
+disk_color ()
+{
+    if [ ! -w "${PWD}" ] ; then
+        echo -en ${Red}
+    elif [ -s "${PWD}" ] ; then
+        local used=$(command df -P "$PWD" |
+                   awk 'END {print $5} {sub(/%/,"")}')
+        if      (( used > 95 )); then
+            echo -en ${ALERT}
+        elif    (( used > 90 )); then
+            echo -en ${BRed}
+        else
+            echo -en ${Green}
+        fi
+    else
+        echo -en ${Cyan}
+    fi
+}
+
+job_color ()
+{
+    if      (( $(jobs -s | wc -l) > 0 )); then
+        echo -en ${BRed}
+    elif    (( $(jobs -r | wc -l) > 0 )) ; then
+        echo -en ${BCyan}
+    fi
+}
+
+[[ -z $SSH_CONNECTION ]] && host_str='\h' ||
+    host_str=`echo $SSH_CONNECTION | awk '{print $3}'`
+
+PROMPT_COMMAND="history -a"
+PS1="[\[\$(load_color)\]\A\[${NC}\] "
+PS1=${PS1}"\[${user_color}\]\u\[${NC}\]@\[${conn_color}\]$host_str\[${NC}\] "
+PS1=${PS1}"\[\$(disk_color)\]\W\[${NC}\]] "
+PS1=${PS1}"\[\$(job_color)\]>\[${NC}\] "
+######################################################################
+
+################################################# alias
+alias du='du -kh'
+alias df='df -kTh'
 alias ls='ls --color=auto'
 alias ..='cd ..'
 alias cd..='cd ..'
 alias grep='grep -i --color'
-PS1='\[\033[01;33m\][\u@\h \w]$> \[\033[01;36m\]'
-
 alias rm="rm -i"
 alias psme="ps u -u $USER | grep -v 'grep'"
 alias ll="ls -l"
 
+alias path='echo -e ${PATH//:/\\n}'
+alias libpath='echo -e ${LD_LIBRARY_PATH//:/\\n}'
+#################################################
+
+################################################################ functions
+unalias echo &>/dev/null
+echo ()
+{
+    [[ ! -t 1 ]] && [[ $BASH_SUBSHELL -eq 0 ]] && return
+
+    builtin echo "$@"
+}
+
+unalias rm &>/dev/null
+rm ()
+{
+    [[ $* = *-f* ]] && read -n1 -p $'Force removing? [y/n]\n' &&
+        [[ $REPLY != y ]] && {
+            echo "Cancelled"; return
+        }
+    command rm "$@"
+}
+
+ff ()
+{
+    find -type f -iname "*${*}*" -ls
+}
+
+ps ()
+{
+    command ps "$@" -u $USER -o pid,%cpu,%mem,rss,cmd
+}
+################################################################
+
+mesg n # disable annoying!
+
+################################Readline customize
+prefix='bind -m vi-insert'
+comms=(
+    '"\C-b": "\e"'
+    '"\C-l": backward-kill-word'
+    '"\ei": complete'
+)
+
+for comm in "${comms[@]}"; do
+    eval "$prefix" \'"$comm"\'
+done
+################################
+
+# Npm completion patch
+type npm &>/dev/null && . <( npm completion )
+
+##################################################### Less customize
+alias more='less'
+export PAGER=less
+export LESSCHARSET='utf-8'
+export LESSOPEN='|/usr/bin/lesspipe.sh %s 2>&-'
+                # Use this if lesspipe.sh exists.
+export LESS='-i -N -w  -z-4 -g -M -X -R -F -P%t?f%f \
+:stdin .?pb%pb\%:?lbLine %lb:?bbByte %bb:-...'
+
+# LESS man page colors (makes Man pages more readable).
+export LESS_TERMCAP_mb=$'\E[01;31m'
+export LESS_TERMCAP_md=$'\E[01;31m'
+export LESS_TERMCAP_me=$'\E[0m'
+export LESS_TERMCAP_se=$'\E[0m'
+export LESS_TERMCAP_so=$'\E[01;44;33m'
+export LESS_TERMCAP_ue=$'\E[0m'
+export LESS_TERMCAP_us=$'\E[01;32m'
+#####################################################
+
+export TIMEFORMAT=$'\nreal %3R\tuser %3U\tsys %3S\tpcpu %P\n'
+export HISTIGNORE="&:bg:fg:ll:h"
+export HISTTIMEFORMAT="$(echo -e ${BCyan})[%d/%m %H:%M:%S]$(echo -e ${NC}) "
+export HISTCONTROL=ignoredups
+export HOSTFILE=$HOME/.hosts    # Put a list of remote hosts in ~/.hosts
 export PATH=/home/abbccc/venv/bin:$PATH
 export PATH=/home/abbccc/.local/share/gem/ruby/3.0.0/bin:$PATH
 export PATH=$HOME/.local/bin:$PATH
 export PATH=$HOME/bin:$PATH
-
 export PYTHONPATH=$HOME/venv/lib/python3.11/site-packages:$PYTHONPATH
 
-neofetch
-
-# LFS experiment
-export LFS=/mnt/LFS
-
-echo $BASH_SOURCE
-
-detail()
-{
-    if [ -z "$1" -o $# -ne 1 ]; then
-	echo "Bad usage"
-	return
-    fi
-    prg_name="$1"
-    prg_path=`which $prg_name 2>/dev/null`
-
-    if [ $? -ne 0 ]; then
-	echo "Command not found"
-	return
-    fi
-
-    realpath $prg_path
-    echo
-    file $prg_path
-    echo
-    whatis $prg_name
-    echo
-    type $prg_name
-    echo
+#################################################################### V2ray service
+type v2ray &>/dev/null && ! pgrep v2ray &>/dev/null && {
+    v2ray run -c $HOME/Proxy/v2.json &>/dev/null&
+    jobs
+    sleep 1 && ps $! &>/dev/null && echo "V2ray service is running."
 }
-
-mesg n # disable annoying!
+####################################################################
