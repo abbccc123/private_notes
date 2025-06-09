@@ -882,3 +882,5 @@ File size format( from le --help ):
 Single alphabet letter, e.g. K M G T
 1K  = 1024 Byte
 1KB = 1000 Byte
+
+use `cp -ru` instead of `cp -r` # do not overwrite newer files, one can never be too cautious
