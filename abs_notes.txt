@@ -884,3 +884,12 @@ Single alphabet letter, e.g. K M G T
 1KB = 1000 Byte
 
 use `cp -ru` instead of `cp -r` # do not overwrite newer files, one can never be too cautious
+
+About hard-link:
+resource: `info ln`
+
+hard-links point to the data of a file, technically, 'inode', they do not occupy more file system space:
+Assume that a file A exist in current dir
+$> ln A B
+$> du -kTh -d0
+Check if the output is changed

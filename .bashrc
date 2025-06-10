@@ -179,7 +179,12 @@ echo ()
 unalias rm &>/dev/null
 rm ()
 {
-    [[ $* = *-f* ]] && read -n1 -p $'Force removing? [y/n]\n' &&
+    OPTIND=1
+    b_force_opt=
+    while getopts ":f" opt; do
+        [[ $opt = f ]] && b_force_opt=1
+    done
+    [[ $b_force_opt = 1 ]] && read -n1 -p $'Force removing? [y/n]\n' &&
         [[ $REPLY != y ]] && {
             echo "Cancelled"; return
         }
