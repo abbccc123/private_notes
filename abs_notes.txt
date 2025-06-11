@@ -893,3 +893,11 @@ Assume that a file A exist in current dir
 $> ln A B
 $> du -kTh -d0
 Check if the output is changed
+
+COLUMNS=80 man bash, 可以调整manuel输出的宽度
+
+十进制转16进制数字字符串:
+$> printf '%x' "$num"
+
+reverse:
+$> echo $((16#$num))
