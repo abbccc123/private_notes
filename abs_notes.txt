@@ -901,3 +901,25 @@ $> printf '%x' "$num"
 
 reverse:
 $> echo $((16#$num))
+
+Gpt wisdoms:
+FIFO 是同步通信机制。
+仅写端打开 FIFO 时，如果没有读端，就会 阻塞等待。
+同理，仅读端打开 FIFO 时，如果没有写端，也会 阻塞等待。
+
+stdout stderr默认指向同一个resource -> terminal device
+
+使用`man bash`观察metacharacters and control operator
+发现control operator都是metacharacter的组合，是否可以这样认为:
+metacharacter完成基本的语词分割，然后部分metacharacters还被赋予了特殊的含义，比如重定向或者控制功能
+
+关注shopt - login_shell选项( how to know if current shell is a login shell ? )
+
+辨析前后台进程组概念, 为什么会有这种区别?
+
+Hard-link:
+出现在文件系统多个位置的同一份数据。
+典型用途:
+~/.rc 目录下有一些配置文件数据(.vimrc .bashrc)
+现在希望用vcs(e.g. git)管理.rc目录，同时使配置文件生效，那么就可以用hard-link了
+Why is soft links not working here?

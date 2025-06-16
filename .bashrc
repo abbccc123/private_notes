@@ -142,6 +142,19 @@ job_color ()
     fi
 }
 
+append_path ()
+{
+    case :"$PATH": in
+        *:"$1":* ) ;;
+        *        ) PATH="${PATH:+$PATH:}$1";;
+    esac
+}
+
+command_not_found_handle ()
+{
+    echo "Command [$1] not found, sorry for that"
+}
+
 [[ -z $SSH_CONNECTION ]] && host_str='\h' ||
     host_str=`echo $SSH_CONNECTION | awk '{print $3}'`
 
@@ -244,10 +257,14 @@ export HISTIGNORE="&:bg:fg:ll:h"
 export HISTTIMEFORMAT="$(echo -e ${BCyan})[%d/%m %H:%M:%S]$(echo -e ${NC}) "
 export HISTCONTROL=ignoredups
 export HOSTFILE=$HOME/.hosts    # Put a list of remote hosts in ~/.hosts
-export PATH=/home/abbccc/venv/bin:$PATH
-export PATH=/home/abbccc/.local/share/gem/ruby/3.0.0/bin:$PATH
-export PATH=$HOME/.local/bin:$PATH
-export PATH=$HOME/bin:$PATH
+
+##########################################################
+append_path "$HOME/bin"
+append_path "$HOME/.local/bin"
+append_path "/home/abbccc/venv/bin"
+append_path "/home/abbccc/.local/share/gem/ruby/3.0.0/bin"
+##########################################################
+
 export PYTHONPATH=$HOME/venv/lib/python3.11/site-packages:$PYTHONPATH
 
 #################################################################### V2ray service
