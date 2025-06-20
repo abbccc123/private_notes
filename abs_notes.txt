@@ -921,5 +921,46 @@ Hard-link:
 出现在文件系统多个位置的同一份数据。
 典型用途:
 ~/.rc 目录下有一些配置文件数据(.vimrc .bashrc)
-现在希望用vcs(e.g. git)管理.rc目录，同时使配置文件生效，那么就可以用hard-link了
+Now I wish to use VCS to manage .rc directory, at the meantime, fire up config files,
+then I will use hard-link
+
 Why is soft links not working here?
+
+The reason of unexpected exit of v2ray in .bashrc:
+the process group id(pgid) of the v2ray process is the same as the login shell itself, so they are in the same process group,
+When I type Ctrl-C, the v2ray process receive the interrupt and exit immediately.
+
+`sleep` running background will ignore interrupt signal (signal 2)
+
+The complexibility of subshells:
+$> ( sleep 5; sleep 10 ; ) & while a=`ps | grep -qE "($$|$!)"` ; do echo "$a"; sleep 1;  done
+1. That is a bit tricky, why does it work?
+
+Note the exit status of variable assignments
+
+From `man bash - pipelines`:
+This connection (refer to the connection of pipe), if performed before any direction.
+Consider this as an anonymous pipe, in constract to named pipe, e.g. pipe created with 'mkpipe'
+
+Subshell is an environment with no need to reinitialize itself.
+
+a=1
+echo $(a=1 echo $a)
+$> (empty)
+It means what? Explain it.
+
+Asynchronous command: the command suffice with a ampersand
+
+/dev/stdin  is an alias for /proc/self/fd/0
+/dev/stdout is an alias for /proc/self/fd/1
+/dev/stderr is an alias for /proc/self/fd/2
+In shell programming, they can all be redirected.
+
+When the prompt is dispalyed, it means the shell is ready to read command from your terminal.
+
+About xterm title:
+If you failed to change xterm title, you can check if:
+$> set | grep -i prompt
+PROMPT_COMMAND=( [0]=....  [1]="printf '\e]0..........\a'" )
+
+

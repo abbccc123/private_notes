@@ -211,7 +211,7 @@ ff ()
 
 ps ()
 {
-    command ps "$@" -u $USER -o pid,%cpu,%mem,rss,cmd
+    command ps "$@" -u $USER -o pid,pgid,%cpu,%mem,rss,cmd
 }
 ################################################################
 
@@ -269,7 +269,7 @@ export PYTHONPATH=$HOME/venv/lib/python3.11/site-packages:$PYTHONPATH
 
 #################################################################### V2ray service
 type v2ray &>/dev/null && ! pgrep v2ray &>/dev/null && {
-    v2ray run -c $HOME/Proxy/v2.json &>/dev/null&
+    v2ray run -c $HOME/Proxy/v2.json&>/dev/null&
     jobs
     sleep 1 && ps $! &>/dev/null && echo "V2ray service is running."
 }
