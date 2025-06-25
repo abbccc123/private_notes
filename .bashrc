@@ -274,3 +274,10 @@ type v2ray &>/dev/null && ! pgrep v2ray &>/dev/null && {
     sleep 1 && ps $! &>/dev/null && echo "V2ray service is running."
 }
 ####################################################################
+
+export GTK_IM_MODULE=fcitx5
+export QT_IM_MODULE=fcitx5
+export XMODIFIERS=@im=fcitx5
+export INPUT_METHOD=fcitx5
+export SDL_IM_MODULE=fcitx5
+export GLFW_IM_MODULE=ibus

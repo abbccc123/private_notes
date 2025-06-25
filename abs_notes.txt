@@ -963,4 +963,5 @@ If you failed to change xterm title, you can check if:
 $> set | grep -i prompt
 PROMPT_COMMAND=( [0]=....  [1]="printf '\e]0..........\a'" )
 
-
+Yet another difference between login shell and non-login shell:
+The jobs created in login shell shall exit upon shell exiting, however, the jobs in non-login shell will not.
