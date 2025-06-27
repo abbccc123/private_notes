@@ -152,7 +152,7 @@ append_path ()
 
 command_not_found_handle ()
 {
-    echo "Command [$1] not found, sorry for that"
+    echo -e "Command [${ALERT}$1${NC}] not found, sorry for that"
 }
 
 [[ -z $SSH_CONNECTION ]] && host_str='\h' ||
