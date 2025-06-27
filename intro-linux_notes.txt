@@ -1,0 +1,11 @@
+`su` stands for 'Switch User'
+
+intro-linux书如其名，是一些比较基础的介绍
+
+The kernel is fully loaded to memory by bootloader at once, after that, all
+executable files(images) are linked to physical memory through kernel mm
+subsystem.
+加载可执行文件的过程被内核mm子系统通过【按需加载页】,【mmap】等技术优化。
+
+The shell allows the user to handle a system in a very flexible way.
+task automation
