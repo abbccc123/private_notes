@@ -9,3 +9,12 @@ subsystem.
 
 The shell allows the user to handle a system in a very flexible way.
 task automation
+
+The abstract of VFS subsystem:
+In VFS, filenames are managed via dentry structure. dentry contains a pointer
+to inode, which contains the metadata and data block of the file.
+
+Note the dentry and inode data structure of kernel VFS subsystem.
+
+我发现我在文件里找关键字的时候总喜欢 cat file | grep keyword,太搓了。
+不如grep keyword file..., 效率高，击键少。一定要改过来。

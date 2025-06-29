@@ -168,10 +168,10 @@ PS1=${PS1}"\[\$(job_color)\]>\[${NC}\] "
 ################################################# alias
 alias du='du -kh'
 alias df='df -kTh'
-alias ls='ls --color=auto'
+alias ls='ls -F --color=auto'
+alias grep='grep -i --color=auto'
 alias ..='cd ..'
 alias cd..='cd ..'
-alias grep='grep -i --color'
 alias rm="rm -i"
 alias psme="ps u -u $USER | grep -v 'grep'"
 alias ll="ls -l"
