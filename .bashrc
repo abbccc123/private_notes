@@ -197,7 +197,8 @@ rm ()
     while getopts ":f" opt; do
         [[ $opt = f ]] && b_force_opt=1
     done
-    [[ $b_force_opt = 1 ]] && read -n1 -p $'Force removing? [y/n]\n' &&
+    [[ $b_force_opt = 1 ]] &&
+    { echo -e "${ALERT}Force removing?${NC} [Y/n]" && read -n1 -s; } &&
         [[ $REPLY != y ]] && {
             echo "Cancelled"; return
         }
