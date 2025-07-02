@@ -965,3 +965,16 @@ PROMPT_COMMAND=( [0]=....  [1]="printf '\e]0..........\a'" )
 
 Yet another difference between login shell and non-login shell:
 The jobs created in login shell shall exit upon shell exiting, however, the jobs in non-login shell will not.
+
+Tell the startup behavior of bash upon these situations:
+interactive login shell
+non-interactive login shell
+interactive, not a login shell
+non-interactive, not a login shell
+
+一直以来的一个问题:
+cd /root # Permission denied
+sudo cd /root # command not found
+cd is a shell builtin.
+sudo: the -s option may be used to run a privileged shell.
+sudo的原理是SUID提权

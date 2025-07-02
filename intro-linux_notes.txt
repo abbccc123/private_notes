@@ -18,3 +18,26 @@ Note the dentry and inode data structure of kernel VFS subsystem.
 
 我发现我在文件里找关键字的时候总喜欢 cat file | grep keyword,太搓了。
 不如grep keyword file..., 效率高，击键少。一定要改过来。
+
+newgrp: Open a shell and change the group of current user.
+
+
+setuid(EUID) experiment:
+$> which ps
+$> /usr/bin/ps
+$> ls -l `which ps`
+$> -rwxr-xr-x blah blah ...
+$> command -p ps
+     bash
+     v2ray
+     bash
+     ps
+
+$> sudo chmod u+s `which ps`
+$> ls -l `which ps`
+$> -rwsr-xr-x blah blah ...
+$> command -p ps
+    ps
+
+About sleep, from gpt:
+本质上还是内核态系统调用，需要依赖内核提供的计时器和内核调度。
