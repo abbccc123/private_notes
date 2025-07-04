@@ -978,3 +978,14 @@ sudo cd /root # command not found
 cd is a shell builtin.
 sudo: the -s option may be used to run a privileged shell.
 sudo的原理是SUID提权
+
+标准输入流指向终端设备时，其屏幕回显是输出到stderr中的，做个实验:
+$> exec 2>/dev/null
+# type something...
+# echo nothing!
+
+# type `echo happy`
+happy
+
+try this: :)
+kill -- -1

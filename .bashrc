@@ -83,11 +83,11 @@ else
 fi
 
 if [[ ${USER} == "root" ]]; then
-    user_color=${Red}
+    user_color=${Red/0/4}
 elif [[ ${USER} != $(logname) ]]; then
-    user_color=${BRed}
+    user_color=${BRed/1/4}
 else
-    user_color=${BCyan}
+    user_color=${BCyan/1/4}
 fi
 
 # Get appropriate color regarding to cpu load
@@ -175,6 +175,7 @@ alias cd..='cd ..'
 alias rm="rm -i"
 alias psme="ps u -u $USER | grep -v 'grep'"
 alias ll="ls -l"
+alias lsblk="lsblk -f"
 
 alias path='echo -e ${PATH//:/\\n}'
 alias libpath='echo -e ${LD_LIBRARY_PATH//:/\\n}'
