@@ -1,4 +1,18 @@
+set nocompatible
+
 source $VIMRUNTIME/defaults.vim
+
+if &term == "screen" || &term == "screen-256color"
+  set t_Co=256
+  syntax on
+  set background=dark
+endif
+
+if $TERM == 'linux'
+  colorscheme blue
+else
+  colorscheme retrobox
+endif
 
 call plug#begin('~/.vim/plugged')
 
@@ -15,10 +29,11 @@ set number
 filetype plugin on
 
 set termguicolors
-let ayucolor='light'
+set t_Co=256
+"let ayucolor='light'
 set background=light
 " colorscheme ayu
-colorscheme retrobox
+" colorscheme retrobox
 " colorscheme retrobox
 
 let g:rainbow_active=1
@@ -76,12 +91,23 @@ nnoremap <space>j :terminal<enter><C-W>J
 nnoremap <space>h :terminal<enter><C-W>H
 nnoremap <space><space> :terminal<enter>
 
+nnoremap <esc>u <c-u>
+nnoremap <esc>d <c-d>
+
+nnoremap <esc>c :tabnew<enter>
+nnoremap <esc>h :tabprev<enter>
+nnoremap <esc>l :tabnext<enter>
+
 " [shortcut] move among windows
 nnoremap <tab> <C-w>
 tnoremap <tab>h <C-w>h
 tnoremap <tab>j <C-w>j
 tnoremap <tab>k <C-w>k
 tnoremap <tab>l <C-w>l
+tnoremap <tab>t <c-w>:terminal<enter>
+
+tnoremap <tab>q <c-d>
+tnoremap <tab><tab> <c-w>N
 
 nnoremap K k
 

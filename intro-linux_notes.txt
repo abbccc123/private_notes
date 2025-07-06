@@ -41,3 +41,12 @@ $> command -p ps
 
 About sleep, from gpt:
 本质上还是内核态系统调用，需要依赖内核提供的计时器和内核调度。
+
+可读的系统日期/时间的格式由env var TZ 控制。
+比如
+$> export TZ='America/Los_Angeles'
+$> date
+输出美西时间
+
+现代USB stick(U盘)和sata硬盘一样使用SCSI协议栈，
+USB和sata都是传输总线类型

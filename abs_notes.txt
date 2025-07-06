@@ -989,3 +989,12 @@ happy
 
 try this: :)
 kill -- -1
+
+Yet another important point:
+$> export var
+$> var=1
+$> bash -c "echo $var" # output `1`
+$> var=2
+$> bash -c "echo $var" # output `2`
+
+也就是说export声明导出的环境变量之后，无论其值怎么变化，都会反映到子进程中.

@@ -29,6 +29,7 @@ shopt -s extglob
 
 shopt -u mailwarn
 
+
 # Normal Colors
 Black='\e[0;30m'        # Black
 Red='\e[0;31m'          # Red
@@ -215,6 +216,11 @@ ps ()
 {
     command ps "$@" -u $USER -o pid,pgid,%cpu,%mem,rss,cmd
 }
+
+man ()
+{
+    COLUMNS=70 command -p man "$@"
+}
 ################################################################
 
 mesg n # disable annoying!
@@ -283,3 +289,5 @@ export XMODIFIERS=@im=fcitx5
 export INPUT_METHOD=fcitx5
 export SDL_IM_MODULE=fcitx5
 export GLFW_IM_MODULE=ibus
+
+export HISTSIZE=2000
