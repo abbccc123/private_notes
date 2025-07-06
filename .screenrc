@@ -1,5 +1,5 @@
 # 设置支持 256 色
-term screen-256color
+term xterm-256color
 
 # 开启背景擦除（让 Vim 清屏等更干净）
 defbce on
@@ -13,10 +13,13 @@ defutf8 on
 # 终端滚动缓冲区大小（行数）
 defscrollback 10000
 
+allpartial on
+
 # 设置状态栏
 hardstatus on
 hardstatus alwayslastline
-hardstatus string "%{= kG}[ %H ] %{= kw}%?%-Lw%?%{= kW}%n*%f %t%?(%u)%?%{= kw}%?%+Lw%? %{= kG}%= %Y-%m-%d %c "
+hardstatus string "%{= 0;6}[ %H ] %{= 0;7}%?%-Lw%?%n*%f %t%?(%u)%?%?%+Lw%? %= %{= 0;3} %Y-%m-%d %c "
+#hardstatus string "%{= 0; 6}[%H] %{= 0; 7}%n %t %{-} %{= 0; 3}%Y-%m-%d %c"
 
 # 快捷键设置（类似 tmux）
 bind r source ~/.screenrc
@@ -28,7 +31,7 @@ bind x remove      # 关闭当前 region
 defwrap on
 
 # 启动后自动打开两个 region 并分别运行命令（可选）
-screen -t MAIN 0 bash
-split -v
-screen -t EDITOR 1 vim -u ~/.vimrc
-focus
+#screen -t MAIN 0 bash
+#split -v
+#screen -t EDITOR 1 vim -u ~/.vimrc
+#focus

@@ -62,6 +62,53 @@ On_White='\e[47m'       # White
 NC="\e[m"               # Color Reset
 ALERT=${BWhite}${On_Red} # Bold White on red background
 
+# @positional param $1: fg color
+# @positional param $2: bg color
+# @brief: return a terminal escape sequences which can be used to
+#+alter the following characters
+# NOTE: This is a simple function which only support ANSI basic 8 colors:
+# black red green yellow blue magenta cyan white
+getClr ()
+{
+    local -r ARG_COUNT_MIN=1
+    local -r ARG_COUNT_MAX=2
+    [[ $# -ne $ARG_COUNT_MIN && $# -ne $ARG_COUNT_MAX ]] && {
+        echo "Usage: $(basename $0) fg_color [bg_color]"
+        return 1
+    }
+
+    local -r PATTERN='\\e[${bold}\;${fgColor}\;${bgColor}m'
+    local bold=00 fgColor bgColor=49 digit
+
+    [[ $1 =~ '^b' ]] && bold=01
+
+    map () {
+        local val
+        case $1 in
+            *[bB][lL][aA][cC][kK]*)         val=0;;
+            *[rR][eE][dD]*)                 val=1;;
+            *[gG][rR][eE][eE][nN]*)         val=2;;
+            *[yY][eE][lL][lL][oO][wW]*)     val=3;;
+            *[yY][eE][lL][lL][oO][wW]*)     val=4;;
+            *[mM][aA][gG][eE][nN][tT][aA]*) val=5;;
+            *[cC][yY][aA][nN]*)             val=6;;
+            *[wW][hH][iI][tT][eE]*)         val=7;;
+            *)                              val=*
+        esac
+        echo "$val"
+    }
+
+    digit=`map $1`
+    [[ $digit != \* ]] && fgColor=3${digit} || fgColor=30
+
+    [[ $# -eq 2 ]] && {
+        digit=`map $2`
+        [[ $digit != \* ]] && bgColor=4${digit}
+    }
+
+    eval echo "$PATTERN"
+}
+
 ######################################################## motd
 echo -e "${BCyan}BASH ${BRed}${BASH_VERSION%.*}${BCyan}\
  - DISPLAY on ${BRed}$DISPLAY${NC}\n"
@@ -219,7 +266,15 @@ ps ()
 
 man ()
 {
-    COLUMNS=70 command -p man "$@"
+    col=$(($COLUMNS-10))
+    (($col > 80)) && col=80
+    echo "Use width = $col" ; sleep 1
+    COLUMNS=$col command -p man "$@"
+}
+
+vim ()
+{
+    TERM=xterm-256color command vim -u ~/.vimrc "$@"
 }
 ################################################################
 
