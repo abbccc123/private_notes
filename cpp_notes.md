@@ -45,3 +45,11 @@ Most people learn as much or more from following the examples as they do from re
 少部分天才可以越过这一步
 
 Member functions can also be (forward) declared inside the class definition, and defined after the class definition.
+
+identifier: the name implies that it is the unique.
+
+Is main function always running before any other function? No, and give a example.
+
+EXIT_SUCCESS(0) and EXIT_FAILURE(1) from the standard C library.
+
+Tell the ODR principle in cpp.

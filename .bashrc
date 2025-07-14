@@ -2,7 +2,12 @@
 
 # Based on Emmanuel Rouat's .bashrc
 
-[[ $- != *i* ]] && exit
+[[ $- != *i* ]] && return
+
+[[ $- != *i* ]] && {
+    exec 9>&1
+    exec 1>/dev/null
+}
 
 [[ -f /etc/bash.bashrc ]] && . /etc/bash.bashrc
 
@@ -276,6 +281,24 @@ vim ()
 {
     TERM=xterm-256color command vim -u ~/.vimrc "$@"
 }
+
+car ()
+{
+    echo -e "${BCyan}[ Compilation begin ]${NC}"
+    sources=$(find -iname "*cpp" | grep -v examples)
+    headers_dir=$(dirname `find -iname "*h"` 2>/dev/null | uniq)
+    echo -e "${Black}Source files: "${sources}
+    g++ $sources -I${headers_dir} -Werror -Wextra && {
+        echo -e "${BGreen}[ Compilation finished ]${NC}\n"
+        echo -e "${BCyan}[ Program start ]${NC}"
+        ./a.out && {
+            echo -e "${BGreen}[ Program finished ]${NC}"
+        }
+    } || {
+        echo -e "${BRed}[ Compilation failed ]${NC}\n"
+    }
+}
+export -f car
 ################################################################
 
 mesg n # disable annoying!
@@ -346,3 +369,8 @@ export SDL_IM_MODULE=fcitx5
 export GLFW_IM_MODULE=ibus
 
 export HISTSIZE=2000
+
+[[ $- != *i* ]] && {
+    exec 1>&9
+    exec 9>&-
+}

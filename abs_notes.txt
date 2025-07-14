@@ -927,6 +927,7 @@ then I will use hard-link
 Why is soft links not working here?
 
 The reason of unexpected exit of v2ray in .bashrc:
+
 the process group id(pgid) of the v2ray process is the same as the login shell itself, so they are in the same process group,
 When I type Ctrl-C, the v2ray process receive the interrupt and exit immediately.
 

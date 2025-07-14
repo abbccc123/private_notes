@@ -16,7 +16,7 @@ endif
 
 call plug#begin('~/.vim/plugged')
 
-"Plug 'preservim/nerdtree'
+Plug 'preservim/nerdtree'
 "Plug 'ayu-theme/ayu-vim'
 "Plug 'vim-airline/vim-airline'
 "Plug 'luochen1990/rainbow'
@@ -97,6 +97,7 @@ nnoremap <esc>d <c-d>
 nnoremap <esc>c :tabnew<enter>
 nnoremap <esc>h :tabprev<enter>
 nnoremap <esc>l :tabnext<enter>
+nnoremap <F8> :NERDTreeToggle<enter>
 
 " [shortcut] move among windows
 nnoremap <tab> <C-w>
