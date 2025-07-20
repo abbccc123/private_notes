@@ -53,3 +53,10 @@ Is main function always running before any other function? No, and give a exampl
 EXIT_SUCCESS(0) and EXIT_FAILURE(1) from the standard C library.
 
 Tell the ODR principle in cpp.
+
+Option styles:
+
+Unix short: a dash and an alpha character
+GNU long option: two dashes and a word
+DOS/windows: backslash
+BSD: no dash

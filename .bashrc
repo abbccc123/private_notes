@@ -282,13 +282,18 @@ vim ()
     TERM=xterm-256color command vim -u ~/.vimrc "$@"
 }
 
+gdb ()
+{
+    command gdb -silent
+}
+
 car ()
 {
     echo -e "${BCyan}[ Compilation begin ]${NC}"
     sources=$(find -iname "*cpp" | grep -v examples)
     headers_dir=$(dirname `find -iname "*h"` 2>/dev/null | uniq)
     echo -e "${Black}Source files: "${sources}
-    g++ $sources -I${headers_dir} -Werror -Wextra && {
+    g++ $sources -I${headers_dir} -Werror -Wextra -g && {
         echo -e "${BGreen}[ Compilation finished ]${NC}\n"
         echo -e "${BCyan}[ Program start ]${NC}"
         ./a.out && {
@@ -355,7 +360,7 @@ export PYTHONPATH=$HOME/venv/lib/python3.11/site-packages:$PYTHONPATH
 
 #################################################################### V2ray service
 type v2ray &>/dev/null && ! pgrep v2ray &>/dev/null && {
-    v2ray run -c $HOME/Proxy/v2.json&>/dev/null&
+    setsid v2ray run -c $HOME/Proxy/v2.json&>/dev/null&
     jobs
     sleep 1 && ps $! &>/dev/null && echo "V2ray service is running."
 }

@@ -999,3 +999,19 @@ $> var=2
 $> bash -c "echo $var" # output `2`
 
 也就是说export声明导出的环境变量之后，无论其值怎么变化，都会反映到子进程中.
+
+setsid 可以让.bashrc中启动的进程不属于shell的PGID
+
+; ls 是非法的 why? (hint: check `man bash')
+
+Try these:
+echo a # bb ccc
+echo a# bbccc
+echo a #bbccc
+
+Add more fun:
+echo \ #abbccc
+echo \ #         abbccc
+echo #\  abbccc
+echo \  # abbccc
+echo \  #abbccc
