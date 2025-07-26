@@ -1015,3 +1015,50 @@ echo \ #         abbccc
 echo #\  abbccc
 echo \  # abbccc
 echo \  #abbccc
+
+About pid, ppid, pgid, tpgid, terminal process group:
+pid : process id
+ppid: process parent id
+pgid: process group id
+tpgid: terminal process groupid
+
+[pid, ppid] are simple concept.
+pgid: every process shall belong to a process group, the os will signal all the processes in the group.
+tpgid: 占据着当前终端标准输入流的进程组ID。pid==pgid 的进程是领导进程(leader process),
+向leader process发送的所有内核信号都会传递该进程组中的其他进程。
+
+两种场景:
+1. shell中执行foreground命令，该命令会阻塞标准输入流，当前终端tpgid变为该pid(同时pgid等于该pid),
+如果该命令还派生了子进程，所有子进程的pgid被设置为该leader
+process的pid(pgid),通过键盘中断或者kill向该前台命令发送的内核信号会同步传递至该进程组中的所有进程之中.
+
+2. shell中执行background命令(i.e. add an ampersand `&' after the command),
+    tpgid不变,仍为shell的pid,但是进程组同样被创建. 如果该background
+    command派生了子进程, 它们会拥有相同的pgid, 此时由于该group并非前台进程组,
+    所有向该组发送的内核信号只能影响该pid。如果通过kill杀死了该leader process,
+    其他的子进程不会接收到kill信号，它们的ppid将被设置为init(或systemd),
+    pgid不变。
+
+所以会有个问题:
+如果在后台执行了一个命令(启动进程)，这个进程又创建了子进程，那么如果我们只杀leader
+process, 其他的进程会变成orphan进程，不能再被我们控制了, 所以最佳实践是:
+该后台进程管理所有子进程(它有义务trap kernel signals).
+
+例子:
+Assume we have a simple script named `foo.sh':
+
+#! /bin/bash
+for i in {1..10}; do sleep $(( i * 10 ))& done
+
+sleep 200
+
+And then run it as:
+
+$> foo.sh
+
+Now open a new terminal and run:
+$> pgrep -x sleep
+
+我上面的理解有一些问题，我发现只要是background中的子进程，它们完全不受前台进程组控制,
+无论leader process是以前台还是后台模式执行的,
+前台进程组进行信号传播的对象限于前台进程及其前台子进程

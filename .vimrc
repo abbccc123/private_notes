@@ -77,6 +77,7 @@ set patchmode=.ori
 "nnoremap a A
 map j gj
 map k gk
+noremap <F4> <C-C>:w<enter>
 nnoremap <F2> :NERDTreeToggle<enter>
 nnoremap <F3> :help<enter>:only!<enter>`"`"
 nnoremap <F6> :source~/.vimrc<enter>
