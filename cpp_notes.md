@@ -60,3 +60,17 @@ Unix short: a dash and an alpha character
 GNU long option: two dashes and a word
 DOS/windows: backslash
 BSD: no dash
+
+GDB stl pretty output:
+1. Check /usr/share/gcc-\*/
+2. add ~/.gdbinit
+python
+import sys
+sys.path.insert(0, '/usr/share/gcc-\*/python')
+from libstdcxx.v6.printers import register_libstdcxx_printers
+register_libstdcxx_printers(gdb.current_objfile())
+end
+
+Qt GUI development integrated with GDB:
+1. source /path/to/qt5/qtbase/libexec/qt5printers.py ( pretty printer )
+2. QT_LOGGING_RULES="category[.subcat]=true;othercat.debug=false;\*=false"

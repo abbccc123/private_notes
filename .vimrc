@@ -28,7 +28,7 @@ call plug#end()
 set number
 filetype plugin on
 
-" set termguicolors
+set termguicolors
 set t_Co=256
 "let ayucolor='light'
 set background=light

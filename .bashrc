@@ -229,6 +229,8 @@ alias rm="rm -i"
 alias psme="ps u -u $USER | grep -v 'grep'"
 alias ll="ls -l"
 alias lsblk="lsblk -f"
+alias info='info --vi-keys'
+alias p='command -p ps xo user,pid,ppid,pgid,tty,tpgid,cmd | grep -v grep | grep -E'
 
 alias path='echo -e ${PATH//:/\\n}'
 alias libpath='echo -e ${LD_LIBRARY_PATH//:/\\n}'
@@ -284,7 +286,7 @@ vim ()
 
 gdb ()
 {
-    command gdb -silent
+    command gdb -silent $@
 }
 
 car ()
