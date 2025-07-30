@@ -78,8 +78,9 @@ set patchmode=.ori
 map j gj
 map k gk
 noremap <F4> <C-C>:w<enter>
+noremap <F3> <C-C>:w<enter>
 nnoremap <F2> :NERDTreeToggle<enter>
-nnoremap <F3> :help<enter>:only!<enter>`"`"
+nnoremap <F1> :help<enter>:only!<enter>`"`"
 nnoremap <F6> :source~/.vimrc<enter>
 nnoremap <F7> :nohlsearch<enter>
 nnoremap <F10> :1,$yank +<enter>
