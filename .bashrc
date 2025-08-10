@@ -295,7 +295,8 @@ car ()
     sources=$(find -iname "*cpp" | grep -v examples)
     headers_dir=$(dirname `find -iname "*h"` 2>/dev/null | uniq)
     echo -e "${Black}Source files: "${sources}
-    g++ $sources -I${headers_dir} -Werror -Wextra -g && {
+    echo y | rm -rf ./a.out
+    g++ $sources -I${headers_dir} -Werror -Wextra -g -O0 && {
         echo -e "${BGreen}[ Compilation finished ]${NC}\n"
         echo -e "${BCyan}[ Program start ]${NC}"
         ./a.out && {

@@ -74,3 +74,17 @@ end
 Qt GUI development integrated with GDB:
 1. source /path/to/qt5/qtbase/libexec/qt5printers.py ( pretty printer )
 2. QT_LOGGING_RULES="category[.subcat]=true;othercat.debug=false;\*=false"
+
+
+If you recompile your program in a gdb session via shell command,
+sometimes the gdb cached source code line will note update, in this case you should
+run \`dir' to update the source code search path
+
+bool b; cin >> b;
+true<enter>
+cout << b; // [output] 0
+
+std::cin and std::cin.get
+
+C-style char escape sequence
+Tell difference between std::endl and '\n'

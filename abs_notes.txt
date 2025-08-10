@@ -1062,3 +1062,23 @@ $> pgrep -x sleep
 我上面的理解有一些问题，我发现只要是background中的子进程，它们完全不受前台进程组控制,
 无论leader process是以前台还是后台模式执行的,
 前台进程组进行信号传播的对象限于前台进程及其前台子进程
+
+
+Try to tell the difference between terminal multipler and modern terminal emulator tab feature.
+
+1. Terminal emulator tab behaves like a `multipler', however it is restrained to local desktop
+environment. When you need to work on remote environment without a desktop environment(i.e. via ssh),
+it will not work. There is a workaround: you can open many ssh connections, however, is very
+inefficient. There is another advantage: you can quit the `screen' or `tmux' session and close
+ssh connection, after a while, you can login again and resume the session.
+
+2. 不依赖图形化用户界面, 使用键盘可以完成分屏与多任务。Especially useful in remote development.
+
+3. 持久化?
+
+4. 脚本配置，灵活效率高
+
+About environment variable set and pipeline:
+$> a=1 bash -c 'echo $a' | a=2 bash -c 'echo $a'
+$> a=1 bash -c 'echo $a' | bash -c 'echo $a'
+var=value only affect current command

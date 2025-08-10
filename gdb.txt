@@ -6963,6 +6963,7 @@ useful.
 `add-shared-symbol-file'
      The `add-shared-symbol-file' command can be used only under
      Harris' CXUX operating system for the Motorola 88k.  GDB
+
      automatically looks for shared libraries, however if GDB does not
      find yours, you can run `add-shared-symbol-file'.  It takes no
      arguments.

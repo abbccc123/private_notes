@@ -74,6 +74,8 @@ set confirm
 set backup
 set patchmode=.ori
 
+set shortmess-=S
+
 "nnoremap a A
 map j gj
 map k gk
