@@ -88,3 +88,33 @@ std::cin and std::cin.get
 
 C-style char escape sequence
 Tell difference between std::endl and '\n'
+
+Use `const' for runtime constant
+Use `constexpr' for compile-time constant
+
+非常重要: 使用g++编译c++工程,函数实参的执行顺序是从右到左!
+
+=========================================================
+#include <iostream>
+
+int getValue()
+{
+    std::cout << "Enter an integer: ";
+
+    int x{};
+    std::cin >> x;
+    return x;
+}
+
+void printCalculation(int x, int y, int z)
+{
+    std::cout << x + (y * z);
+}
+
+int main()
+{
+    printCalculation(getValue(), getValue(), getValue());
+
+    return 0;
+}
+=========================================================

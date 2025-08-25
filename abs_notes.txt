@@ -1082,3 +1082,5 @@ About environment variable set and pipeline:
 $> a=1 bash -c 'echo $a' | a=2 bash -c 'echo $a'
 $> a=1 bash -c 'echo $a' | bash -c 'echo $a'
 var=value only affect current command
+
+nmcli : connection device
