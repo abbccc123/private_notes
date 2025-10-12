@@ -1,0 +1,100 @@
+C++ Primer 阅读笔记
+
+Chapter 1 Getting Started
+
+[On most systems, the value returned from main is a status indicator.]
+In Unix-like systems, the status code may be captured by the command interpreter(typically, a shell)
+
+[A return value
+of 0 indicates success. A nonzero return has a meaning that is defined by
+the system.]
+This statement is not exact.
+为何这么说呢, 返回值的含义并不是由操作系统(kernel)决定的, 而应该是程序本身决定的。
+E.g. pgrep command in Linux. The meaning of non-zero return code is specified by its manual.
+
+The important of strong-type programming language: maintainance.
+难以使用无类型语言开发一个超大型系统...
+Javascript -> Typescript
+
+[Compilers usually include options to generate warnings about problematic
+constructs. It is usually a good idea to use these options.]
+Appropriately use compiler options.
+
+{Shell 相关}
+The return value of a program will be truncated to the lowest 8 bits,
+as the exit status of shell command execution.
+
+=======================================================================================================
+Note: Distinguish [Control characters] and [Escaped sequenece]
+Escaped sequence - Shell builtin(echo printf) and external commands, C/C++ language specification
+Control characters - the characters which is non-printable but have special meaning to the environment.
+=======================================================================================================
+
+[Programmers often add print statements during debugging. Such statements
+should always flush the stream. Otherwise, if the program crashes, output
+may be left in the buffer, leading to incorrect inferences about where the
+program crashed.]
+
+[The compiler ignores comments.]
+In fact, the preprocessor replace every comment with a space.
+
+[About the implicit conversion of std::istream]
+'''CPP
+while (std::cin) {
+    std::cout << 1 << "\n";
+} // will output "1\n" continuously
+'''
+istream defines an operator overload:
+E.g.
+std::base_ios::operator bool() const
+{
+}
+So it can be used in a conditional test expression.
+
+[Entering an End-of-File from the Keyboard]
+Windows: Ctrl-z
+Unix-like: Ctrl-d
+
+[By default, reading cin flushes cout; cout is also flushed when the program
+ends normally.]
+std::cout 缓存输出，需要flush才会执行系统调用把实际内容写入stdout.
+std::flush, std::endl 这两种manipulator起到flush作用
+Qt的logger在每次operator << 之后会立刻flush, 不会丢失输出
+
+An analysis of standard library output stream(i.e. ostream)
+1. cout {bind /dev/stdout, buffer}
+2. cerr {bind /dev/stderr, not buffer}
+3. clog {bind /dev/stderr, buffer}
+Although they always connect to the same device(pseduo terminal in Unix-like systems).
+
+Distinguish top-level and low-level const qualifier.
+赋值运算时，若rvalue's type is low-level but lvalue isn't, the compiler will complain.
+
+const versus constexpr
+The const-qualified type can be initialized from a runtime non-const expression.
+
+[A declaration can involve only a single base type].
+
+[In particular, when we use a reference as an initializer, the
+initializer is the corresponding object]
+使用类型推导的时候，对于reference type 不可以省略ampersand (&)
+
+[Second, auto ordinarily ignores top-level consts (§ 2.4.3, p. 63). As usual in
+initializations, low-level consts, such as when an initializer is a pointer
+to const, are kept]
+Top-level const qualifier will be ignored, so when needed, specify it explicitly.
+
+[The way decltype handles top-level const and references differs subtly from the
+way auto does.]
+
+int &r { ... };
+decltype(r) // int & (lvalue)
+decltype(r + 0) // int (prvalue)
+                //
+[Whenever a header is updated, the source files that use that header must be
+recompiled to get the new or changed declarations.]
+
+C++中 字符串常量是lvalue, 有地址!
+std::is_same_v<decltype("abbccc"), const char(&)[7]> == true>
+
+注意 the return type of string::size() is string::size_type
