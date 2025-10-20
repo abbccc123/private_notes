@@ -94,7 +94,41 @@ decltype(r + 0) // int (prvalue)
 [Whenever a header is updated, the source files that use that header must be
 recompiled to get the new or changed declarations.]
 
-C++中 字符串常量是lvalue, 有地址!
+C++中 字符串常量是lvalue, 有地址! 可以用 & operator 取地址
 std::is_same_v<decltype("abbccc"), const char(&)[7]> == true>
 
 注意 the return type of string::size() is string::size_type
+
+[As with vector, arrays hold objects. Thus, there are no arrays of references.]
+
+Cannot use auto keywork to deduce base type of built-in array.
+
+[it is important to remember that string literals end with a null character]
+The null character is also copied into char characters.
+
+[By default, type modifiers bind right to left]
+
+Note the behavior of module operator on arithmetic types...
+-8 % 3 = -2, -8 % -3 = -2, 8 % 3 = 2, 8 % -3 = 2
+
+{留意算术运算类型转换规则.}
+
+{隐式转换的几种类型: lvalue-to-rvalue, array-to-pointer, function-to-pointer}
+All fundamental types can be converted to bool.
+
+[Conversion to const: We can convert a pointer to a nonconst type to a
+pointer to the corresponding const type, and similarly for references.]
+
+However, the reverse conversion, is invalid.
+
+{Compound type conversion} const修饰的组合类型的转换规则
+Pointer: Top-level Low-level, 有四种可能的转换, 哪些合法哪些不合法?
+Reference: 两种可能的转换
+
+Try-catch中, try block中的declaration 不可以 在catch block中使用!
+
+[In C++, names have scope, and objects have lifetimes]
+Scope is bound to names,
+Lifetime is bound to names.
+
+Local static Objects, what is their lifetime and scope?
