@@ -1,0 +1,13 @@
+# Fast load...
+define replay 
+
+she g++ -g -O0 $arg0
+
+file a.out
+dir
+
+b main
+run
+
+end
+
