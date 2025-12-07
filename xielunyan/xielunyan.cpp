@@ -14,9 +14,9 @@ namespace {
 namespace {
     QVector<QGradient::Preset> genGradient() {
         static QVector<QGradient::Preset> arr {
-            static_cast<QGradient::Preset>(QRandomGenerator::global()->bounded(16)),
-            static_cast<QGradient::Preset>(QRandomGenerator::global()->bounded(16) + 16),
-            static_cast<QGradient::Preset>(QRandomGenerator::global()->bounded(16) + 32)
+            static_cast<QGradient::Preset>(QRandomGenerator::global()->bounded(60)),
+            static_cast<QGradient::Preset>(QRandomGenerator::global()->bounded(60) + 60),
+            static_cast<QGradient::Preset>(QRandomGenerator::global()->bounded(60) + 60)
         };
         return arr;
     }
@@ -54,7 +54,7 @@ QSize XieLunYan::sizeHint() const
 
 void XieLunYan::paintEvent(QPaintEvent *event)
 {
-    constexpr qint32 rad { 28 };
+    constexpr qint32 rad { 30 };
     constexpr qint32 step = 2;
     static qint32 tick = 0;
 
@@ -69,7 +69,7 @@ void XieLunYan::paintEvent(QPaintEvent *event)
 
     painter.translate(width() / 2, height() / 2);
     painter.scale(2, 2);
-    painter.setPen(QPen(Qt::black, 4));
+    painter.setPen(QPen(Qt::black, 10));
     painter.setBrush(QColor(255, 28, 28, 122));
     painter.drawEllipse(-90, -90, 180, 180);
 
