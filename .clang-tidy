@@ -1,0 +1,32 @@
+---
+# 开启的检查项列表
+# '*' 代表开启所有，前缀 '-' 代表关闭特定检查
+Checks: >
+  -*,
+  bugprone-*,
+  cppcoreguidelines-*,
+  modernize-*,
+  performance-*,
+  readability-*,
+  -cppcoreguidelines-pro-type-vararg,
+  -cppcoreguidelines-pro-bounds-array-to-pointer-decay,
+  -readability-braces-around-statements,
+  -modernize-use-trailing-return-type
+
+# 将警告视为错误（让 CI 失败的关键）
+WarningsAsErrors: 'bugprone-*,performance-*'
+
+# 检查选项配置
+CheckOptions:
+  # 限制 loop-convert 检查的对象大小
+  - key:             modernize-loop-convert.MaxCopySize
+    value:           '16'
+  # 变量命名风格（示例：要求所有变量用小写加下划线）
+  - key:             readability-identifier-naming.VariableCase
+    value:           lower_case
+  - key:             readability-identifier-naming.FunctionCase
+    value:           camelBack
+
+# 排除扫描的系统头文件
+HeaderFilterRegex: 'src/.*'
+---
