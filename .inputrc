@@ -1,0 +1,10 @@
+set editing-mode vi
+
+set show-mode-in-prompt on
+set vi-ins-mode-string "(vi-ins)"
+set vi-cmd-mode-string "(vi-cmd)"
+
+set keymap vi-insert
+
+Control-b: "\e"
+Control-l: backward-kill-word
