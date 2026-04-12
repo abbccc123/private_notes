@@ -94,7 +94,7 @@ decltype(r + 0) // int (prvalue)
 [Whenever a header is updated, the source files that use that header must be
 recompiled to get the new or changed declarations.]
 
-C++中 字符串常量是lvalue, 有地址! 可以用 & operator 取地址
+C++中 字符串常量是lvalue, 有地址! 可以用 & operator 取地址
 std::is_same_v<decltype("abbccc"), const char(&)[7]> == true>
 
 注意 the return type of string::size() is string::size_type
@@ -129,6 +129,45 @@ Try-catch中, try block中的declaration 不可以 在catch block中使用!
 
 [In C++, names have scope, and objects have lifetimes]
 Scope is bound to names,
-Lifetime is bound to names.
+Lifetime is bound to objects.
 
 Local static Objects, what is their lifetime and scope?
+
+函数重载时，top-level const is not distinguishable.
+
+为什么c++语言规定 const lvalue reference can be bound to a temporary object?
+考虑作为函数入参类型的 const T &, 允许字面量临时对象 
+
+1. arrays cannot be copied
+2. array objects are converted to pointers in many contexts.
+
+可变参函数的两种实现:
+1. std::initializer_list
+2. variadic template
+
+作为函数返回类型的 const reference.
+
+const char* Foo = "Foo";
+1. decltype(Foo) == const char *
+2. decltype((Foo)) == const char * &
+3. decltype("Foo") == const char (&)[4]
+
+[The main function may not be overloaded.]
+[The main function may not call itself.]
+
+[In C++, name lookup happens before type checking.]
+
+Function default arguments: Compilation-time bind, run-time calculation
+
+Friend class & Friend function
+
+[Delegating Constructors]
+
+[When a constructor delegates to another constructor, the constructor initializer list
+and function body of the delegated-to constructor are both executed.]
+
+Linkage, storage, scope visibility.
+
+编译器为[没]提供Constructor的Class生成默认的Constructor & Deconstructor
+
+STL容器的迭代器类型重载的 prefix/postfix ++ operator，其行为与普通自增运算符相同
