@@ -8,3 +8,14 @@ set keymap vi-insert
 
 Control-b: "\e"
 Control-l: backward-kill-word
+"\ei": complete
+
+set colored-stats On
+set completion-ignore-case On
+set menu-complete-display-prefix On
+set skip-completed-text On
+set show-all-if-ambiguous On
+set show-all-if-unmodified On
+set visible-stats On
+set mark-symlinked-directories On
+set blink-matching-paren On

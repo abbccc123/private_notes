@@ -119,11 +119,16 @@ echo -e "${BCyan}BASH ${BRed}${BASH_VERSION%.*}${BCyan}\
  - DISPLAY on ${BRed}$DISPLAY${NC}\n"
 date
 type -t fortune |& grep file &>/dev/null && {
-    fortune -s
+    fortune -s men-women
 } || {
     echo -e "${Yellow}It seems that you have not\
 installed fortune, why not?${NC}"
 }
+########################################################
+
+
+######################################################## Resume current directory
+[[ -f $HOME/.last_path ]] && cd "`cat ~/.last_path`"
 ########################################################
 
 ###################################################################### Prompt
@@ -195,6 +200,14 @@ job_color ()
     fi
 }
 
+prepend_path ()
+{
+    case :"$PATH": in
+        *:"$1":* ) ;;
+        *        ) PATH="$1:${PATH}";;
+    esac
+}
+
 append_path ()
 {
     case :"$PATH": in
@@ -205,13 +218,50 @@ append_path ()
 
 command_not_found_handle ()
 {
-    echo -e "Command [${ALERT}$1${NC}] not found, sorry for that"
+    paths=( $(find $HOME -iname $1) )
+    local idx=0
+    local opt
+    [[ -z $paths ]] && {
+        echo "$1 is not found"
+        return
+    }
+    for pth in ${paths[@]}; do
+        echo "[$((idx++))]: $pth"
+    done
+    [[ ! -z ${paths[1]} ]] && {
+        echo -n "(choose) > "
+        read opt
+    } || opt=0
+    if (($opt >= 0 && $opt < $idx)); then
+        echo ${paths[$opt]} |& tee /tmp/.${USER}_cd_path
+    else
+        echo "$opt $idx"
+    fi
+}
+
+qt_exam_build_and_run()
+{
+    trap '' INT
+    [[ ! -d b ]] && mkdir -pv b
+    pushd b
+
+    ( trap '-' INT; cmake -GNinja .. && ninja -j$((`nproc`-2)) &&
+        ./`find -maxdepth 1 -executable -type f` )
+
+    popd
+    trap '-' INT
 }
 
 [[ -z $SSH_CONNECTION ]] && host_str='\h' ||
     host_str=`echo $SSH_CONNECTION | awk '{print $3}'`
 
-PROMPT_COMMAND="history -a"
+PROMPT_COMMAND="history -a ;
+if [[ -f /tmp/.\${USER}_cd_path ]]; then
+    cd \`cat /tmp/.\${USER}_cd_path\`
+    rm /tmp/.\${USER}_cd_path
+else
+    sed -i -e \"s@.*@\$PWD@g\" ~/.last_path
+fi"
 PS1="[\[\$(load_color)\]\A\[${NC}\] "
 PS1=${PS1}"\[${user_color}\]\u\[${NC}\]@\[${conn_color}\]$host_str\[${NC}\] "
 PS1=${PS1}"\[\$(disk_color)\]\W\[${NC}\]] "
@@ -234,6 +284,8 @@ alias p='command -p ps xo user,pid,ppid,pgid,tty,tpgid,cmd | grep -v grep | grep
 
 alias path='echo -e ${PATH//:/\\n}'
 alias libpath='echo -e ${LD_LIBRARY_PATH//:/\\n}'
+alias cdqt='cd ~/code/qt-exam/examples/'
+alias ninvaders='ninvaders -l 0'
 #################################################
 
 ################################################################ functions
@@ -268,7 +320,7 @@ ff ()
 
 ps ()
 {
-    command ps "$@" -u $USER -o pid,pgid,%cpu,%mem,rss,cmd
+    command ps "$@" -u $USER -o pid,pgid,tty,%cpu,%mem,rss,cmd
 }
 
 man ()
@@ -289,13 +341,35 @@ gdb ()
     command gdb -silent $@
 }
 
+cmake()
+{
+    local args=$@
+    local cmake_script_search_path=${HOME}/bin/cmake_scripts
+
+    if [[ $args = *-P* ]]; then
+        local origin_input=$(echo ${args} | command grep -o '\-P\s\+[^ ]\+' | awk '{print $2}')
+        local script_path=`realpath $origin_input`
+
+        [[ ! -f $(realpath $script_path) ]] && {
+            script_path=$(find ${cmake_script_search_path} -iname "$(basename $script_path)")
+            [[ -z $script_path ]] && {
+                echo "Cannot find the script file [$origin_input]!"
+                return
+            }
+        }
+        args=$(echo $args | sed "s+${origin_input}+${script_path}+")
+    fi
+
+    command cmake $args
+}
+
 car ()
 {
     echo -e "${BCyan}[ Compilation begin ]${NC}"
-    sources=$(find -iname "*cpp" | grep -v examples)
+    sources=$(find -maxdepth 1 -iname "*cpp" | grep -v examples)
     headers_dir=$(dirname `find -iname "*h"` 2>/dev/null | uniq)
-    echo -e "${Black}Source files: "${sources}
-    echo y | rm -rf ./a.out
+    echo -e "${Blue}Source files: "${sources}
+    command rm -rf ./a.out
     g++ -std=c++20 $sources -I${headers_dir} -Werror -Wextra -g -O0 && {
         echo -e "${BGreen}[ Compilation finished ]${NC}\n"
         echo -e "${BCyan}[ Program start ]${NC}"
@@ -303,7 +377,7 @@ car ()
             echo -e "${BGreen}[ Program finished ]${NC}"
         }
     } || {
-        echo -e "${BRed}[ Compilation failed ]${NC}\n"
+        echo -e "${BRed}[ Exit with non-zero error code ]${NC}\n"
     }
 }
 export -f car
@@ -351,34 +425,43 @@ export HISTIGNORE="&:bg:fg:ll:h"
 export HISTTIMEFORMAT="$(echo -e ${BCyan})[%d/%m %H:%M:%S]$(echo -e ${NC}) "
 export HISTCONTROL=ignoredups
 export HOSTFILE=$HOME/.hosts    # Put a list of remote hosts in ~/.hosts
+export LUA_PATH="$HOME/code/lua/?.lua;$HOME/code/lua/?/init.lua;$HOME/softwares/Lua/src/?.lua;;"
 
 ##########################################################
 append_path "$HOME/bin"
 append_path "$HOME/.local/bin"
 append_path "/home/abbccc/venv/bin"
 append_path "/home/abbccc/.local/share/gem/ruby/3.0.0/bin"
+prepend_path "/usr/lib/qt6/bin"
 ##########################################################
 
-export PYTHONPATH=$HOME/venv/lib/python3.11/site-packages:$PYTHONPATH
+PATH=~/.local/python3/bin:$PATH
+export PYTHONPATH=$HOME/.local/python3/lib/python3.*/site-packages:$PYTHONPATH
+#export PYTHONSTARTUP=$HOME/.pythonrc
+export PYTHON_BASIC_REPL=1
 
 #################################################################### V2ray service
 type v2ray &>/dev/null && ! pgrep v2ray &>/dev/null && {
-    setsid v2ray run -c $HOME/Proxy/v2.json&>/dev/null&
+    setsid v2ray run -c $HOME/v2_jp.json&>/dev/null& disown
     jobs
     sleep 1 && ps $! &>/dev/null && echo "V2ray service is running."
 }
 ####################################################################
+#
+#export GTK_IM_MODULE=fcitx5
+#export QT_IM_MODULE=fcitx5
+#export XMODIFIERS=@im=fcitx5
+#export INPUT_METHOD=fcitx5
+#export SDL_IM_MODULE=fcitx5
+#export GLFW_IM_MODULE=ibus
 
-export GTK_IM_MODULE=fcitx5
-export QT_IM_MODULE=fcitx5
-export XMODIFIERS=@im=fcitx5
-export INPUT_METHOD=fcitx5
-export SDL_IM_MODULE=fcitx5
-export GLFW_IM_MODULE=ibus
-
-export HISTSIZE=2000
+export HISTSIZE=5000
 
 [[ $- != *i* ]] && {
     exec 1>&9
     exec 9>&-
 }
+
+export QT_QPA_PLATFORM=xcb
+
+export TZ='Asia/Shanghai'
