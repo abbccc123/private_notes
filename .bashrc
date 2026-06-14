@@ -252,8 +252,10 @@ qt_exam_build_and_run()
     trap '-' INT
 }
 
-[[ -z $SSH_CONNECTION ]] && host_str='\h' ||
-    host_str=`echo $SSH_CONNECTION | awk '{print $3}'`
+host_str='\h'
+if [[ -n $SSH_CONNECTION ]]; then
+    host_str=${host_str}|$(echo $SSH_CONNECTION | awk '{print $3}')
+fi
 
 PROMPT_COMMAND="history -a ;
 if [[ -f /tmp/.\${USER}_cd_path ]]; then
@@ -448,9 +450,9 @@ type v2ray &>/dev/null && ! pgrep v2ray &>/dev/null && {
 }
 ####################################################################
 #
-#export GTK_IM_MODULE=fcitx5
-#export QT_IM_MODULE=fcitx5
-#export XMODIFIERS=@im=fcitx5
+export GTK_IM_MODULE=ibus
+export QT_IM_MODULE=ibus
+export XMODIFIERS=@im=ibus
 #export INPUT_METHOD=fcitx5
 #export SDL_IM_MODULE=fcitx5
 #export GLFW_IM_MODULE=ibus
