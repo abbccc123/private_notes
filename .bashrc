@@ -254,7 +254,7 @@ qt_exam_build_and_run()
 
 host_str='\h'
 if [[ -n $SSH_CONNECTION ]]; then
-    host_str=${host_str}|$(echo $SSH_CONNECTION | awk '{print $3}')
+    host_str=${host_str}\|$(echo $SSH_CONNECTION | awk '{print $3}')
 fi
 
 PROMPT_COMMAND="history -a ;
